@@ -57,6 +57,7 @@ class _DayPageState extends State<DayPage> {
   DateTime curDate = DateTime.now();
   var entryList = [];
   final myController = TextEditingController();
+  List<Widget> entryWidgets = [];
 
   @override
   void initState() {

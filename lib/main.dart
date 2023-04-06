@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learningdart/home_page.dart';
 
+// TODO: Add 'Rewards'-page that shows all unlocked audio files
+
 void main() {
   runApp(const MyApp());
 }
