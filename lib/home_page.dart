@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learningdart/day_page.dart';
 import 'package:learningdart/overview_page.dart';
+import 'package:learningdart/addentry_page.dart';
 import 'package:learningdart/util.dart';
 
 class HomePage extends StatelessWidget {
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return OverviewPage();
+                    return const OverviewPage();
                   }),
                 );
               },
@@ -43,17 +44,11 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return DayPage(
-                      storage: DiaryEntryStorage(
-                        filename: formatDate(
-                          DateTime.now(),
-                        ),
-                      ),
-                    );
+                    return const AddEntryPage();
                   }),
                 );
               },
-              child: const Text('Confirm & Send'),
+              child: const Text('Add New Entry'),
             ),
           ]),
     );
