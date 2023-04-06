@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learningdart/day_page.dart';
-import 'package:learningdart/util.dart';
+import 'package:research_diary_app/day_page.dart';
+import 'package:research_diary_app/util.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({Key? key}) : super(key: key);

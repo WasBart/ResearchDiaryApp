@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learningdart/day_page.dart';
-import 'package:learningdart/overview_page.dart';
-import 'package:learningdart/addentry_page.dart';
-import 'package:learningdart/util.dart';
+import 'package:research_diary_app/day_page.dart';
+import 'package:research_diary_app/overview_page.dart';
+import 'package:research_diary_app/addentry_page.dart';
+import 'package:research_diary_app/util.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

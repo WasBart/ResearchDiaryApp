@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learningdart/util.dart';
+import 'package:research_diary_app/util.dart';
 
 const List<String> dropdownList = <String>['Text', 'Audio'];
 

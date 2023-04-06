@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:learningdart/util.dart';
+import 'package:research_diary_app/util.dart';
 
 // TODO: insert scrollable view for if there are too many textfields and voice recordings
 // TODO: insert an additional textfield anytime text is entered and the confirm button is pressed
