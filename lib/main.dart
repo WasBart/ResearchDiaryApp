@@ -29,6 +29,7 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   int currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
