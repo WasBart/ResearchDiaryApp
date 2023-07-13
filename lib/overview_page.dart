@@ -2,8 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:research_diary_app/day_page.dart';
 import 'package:research_diary_app/util.dart';
 
-class OverviewPage extends StatelessWidget {
-  const OverviewPage({Key? key}) : super(key: key);
+// TODO: Make a scrollable view that loads clickable entries for days
+// days are determined by what entries per day exist for users
+// if an entry exists, show the day here
+
+class OverviewPage extends StatefulWidget {
+  OverviewPage({Key? key}) : super(key: key);
+
+  @override
+  State<OverviewPage> createState() => _OverviewPageState();
+}
+
+class _OverviewPageState extends State<OverviewPage> {
+  List<ElevatedButton> dayList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    createDaysList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,54 +34,11 @@ class OverviewPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (BuildContext context) {
-                      return DayPage(
-                        storage: DiaryEntryStorage(
-                          filename: formatDate(
-                            DateTime.now(),
-                          ),
-                        ),
-                      );
-                    }),
-                  );
-                },
-                child: const Text('6.4.2023'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (BuildContext context) {
-                      return DayPage(
-                        storage: DiaryEntryStorage(
-                          filename: formatDate(
-                            DateTime.now(),
-                          ),
-                        ),
-                      );
-                    }),
-                  );
-                },
-                child: const Text('5.4.2023'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (BuildContext context) {
-                      return DayPage(
-                        storage: DiaryEntryStorage(
-                          filename: formatDate(
-                            DateTime.now(),
-                          ),
-                        ),
-                      );
-                    }),
-                  );
-                },
-                child: const Text('4.4.2023'),
-              ),
+              Expanded(
+                child: ListView(
+                  children: dayList,
+                ),
+              )
             ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -72,5 +47,18 @@ class OverviewPage extends StatelessWidget {
           },
           child: const Icon(Icons.help_outline)),
     );
+  }
+
+  void createDaysList() {
+    /*for (int i = 0; i < 50; i++) {
+      dayList.add(
+        ElevatedButton(
+          onPressed: () {},
+          child: Text("Test$i"),
+        ),
+      );
+    }
+    */
+    // TODO: Call backend and get all entries for days and create buttons in dayList for each day
   }
 }

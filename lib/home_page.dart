@@ -46,11 +46,11 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return const AddEntryPage();
+                    return OverviewPage();
                   }),
                 );
               },
-              child: const Text('Add New Entry'),
+              child: const Text('Overview'),
             ),
           ]),
     );
