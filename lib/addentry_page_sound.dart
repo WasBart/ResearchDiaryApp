@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:research_diary_app/util.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 const List<String> dropdownList = <String>['Text', 'Audio'];
 
@@ -16,19 +20,24 @@ class AddEntryPageSound extends StatefulWidget {
 class _AddEntryPageSoundState extends State<AddEntryPageSound> {
   int currentPage = 0;
   var dateController = TextEditingController();
+  var textController = TextEditingController();
   var dropdownValue = dropdownList.first;
-  List<Widget> inputWidgets = [
-    const TextField(
-      decoration: InputDecoration(
-          border: OutlineInputBorder(), hintText: 'Enter your thoughts'),
-    ),
-  ];
+  List<Widget> inputWidgets = [];
   final recorder = FlutterSoundRecorder();
   bool isRecorderReady = false;
+  String? textOrAudio = "Text";
+  DateTime? pickedDate;
+  String? inputText;
+  TextField thoughtsTextField = TextField();
 
   @override
   void initState() {
     super.initState();
+    thoughtsTextField = TextField(
+        decoration: InputDecoration(
+            border: OutlineInputBorder(), hintText: 'Enter your thoughts'),
+        controller: textController);
+    inputWidgets.add(thoughtsTextField);
 
     initRecorder();
   }
@@ -36,6 +45,8 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
   @override
   void dispose() {
     recorder.closeAudioSession();
+    dateController.dispose();
+    textController.dispose();
 
     super.dispose();
   }
@@ -43,7 +54,8 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
   Future initRecorder() async {
     final micStatus = await Permission.microphone.request();
     final storageStatus = await Permission.storage.request();
-    final manageStorageStatus = await Permission.manageExternalStorage.request();
+    final manageStorageStatus =
+        await Permission.manageExternalStorage.request();
 
     if (micStatus != PermissionStatus.granted) {
       throw 'Microphone or storage permission not granted';
@@ -73,22 +85,22 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
                   ),
               readOnly: true, // when true user cannot edit text
               onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
+                pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(), //get today's date
                     firstDate: DateTime(
                         2000), //DateTime.now() - not to allow to choose before today.
                     lastDate: DateTime(2101));
                 if (pickedDate != null) {
-                  debugPrint(
-                      pickedDate.toString()); //get the picked date in the format => 2022-07-04 00:00:00.000
+                  debugPrint(pickedDate
+                      .toString()); //get the picked date in the format => 2022-07-04 00:00:00.000
                   //String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                   //print(formattedDate); //formatted date output using intl package =>  2022-07-04
                   //You can format date as per your need
 
                   setState(() {
                     dateController.text = formatDate(
-                        pickedDate); //set foratted date to TextField value.
+                        pickedDate!); //set foratted date to TextField value.
                   });
                 } else {
                   debugPrint("Date is not selected");
@@ -108,6 +120,7 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
                 onChanged: (String? value) {
                   // This is called when the user selects an item.
                   setState(() {
+                    textOrAudio = value;
                     createInputFields(value);
                     dropdownValue = value!;
                   });
@@ -123,7 +136,7 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
             ],
           ),
           for (Widget widget in inputWidgets) widget,
-          ElevatedButton(onPressed: () {}, child: const Text('Confirm')),
+          ElevatedButton(onPressed: confirmEntry, child: const Text('Confirm')),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -148,7 +161,7 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
     final audioFile = File(path!);
 
     print('Recorded audio: $audioFile');
-    // TODO: show play button to listen to just recorded audio file. 
+    // TODO: show play button to listen to just recorded audio file.
     // TODO: show delete button to delete just recorded audio file.
     // TODO: on confirm button, show alert "saved audio file for day: {day} with lenght {length}."
     // TODO: save audio files in separate files identified by date timestamp.
@@ -161,10 +174,7 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
   void createInputFields(String? selectedInputMode) {
     inputWidgets.clear();
     if (selectedInputMode == 'Text') {
-      inputWidgets.add(const TextField(
-        decoration: InputDecoration(
-            border: OutlineInputBorder(), hintText: 'Enter your thoughts'),
-      ));
+      inputWidgets.add(thoughtsTextField);
     } else if (selectedInputMode == 'Audio') {
       inputWidgets.add(
         StreamBuilder(
@@ -190,6 +200,60 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
           child: Icon(recorder.isRecording ? Icons.stop : Icons.mic),
         ),
       );
+    }
+  }
+
+  void confirmEntry() async {
+    // TODO: make api call to post entry for specific device id
+    List<Widget> confirmActions = [
+      TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      )
+    ];
+    if (textOrAudio == 'Text') {
+      //http.post()
+      if (pickedDate == null && textController.text == "") {
+        showCustomDialog(context, "Error",
+            "Please select a date and enter some text.", confirmActions);
+      } else if (textController.text == "") {
+        showCustomDialog(context, "Error", "Please enter some text.", confirmActions);
+      } else if (pickedDate == null) {
+        showCustomDialog(context, "Error", "Please select a date.", confirmActions);
+      } else {
+        String? id = await _getId();
+        http.Response response = await http.put(
+            Uri.parse("http://10.0.2.2:8008/text_notes/"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-token': '123' // TODO: change to actual ID
+            },
+            body: jsonEncode(<String, String>{'text': textController.text}));
+        print("statusCode: " + response.statusCode.toString());
+        // TODO: status code überprüfen ob 200 sonst error message und error handling
+        print("Body: " + response.body);
+        showCustomDialog(
+            context, "Entry saved", "Your entry has been saved.", confirmActions);
+      }
+    } else if (textOrAudio == 'Audio') {
+      if (pickedDate == null) {
+        showCustomDialog(context, "Error", "Please select a date.", confirmActions);
+      }
+    }
+    //showCustomDialog(context, "Entry saved", "Your entry has been saved.", "OK");
+  }
+
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // unique ID on Android
     }
   }
 }

@@ -20,27 +20,11 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return DayPage(
-                      storage: DiaryEntryStorage(
-                        filename: formatDate(
-                          DateTime.now(),
-                        ),
-                      ),
-                    );
-                  }),
-                );
-              },
-              child: const Text('Today'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) {
                     return const AddEntryPageSound();
                   }),
                 );
               },
-              child: const Text(' Audio Youtube Example'),
+              child: const Text('Create New Entry'),
             ),
             ElevatedButton(
               onPressed: () {

@@ -17,6 +17,24 @@ String formatDate(DateTime date) {
   return '${date.day}.${date.month}.${date.year}';
 }
 
+showCustomDialog(BuildContext context, String title, String content, List<Widget> inputActions) {
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(title),
+    content: Text(content),
+    actions: 
+      inputActions
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 // ---- TUTORIAL STUFF ----
 /*
 void main() {
