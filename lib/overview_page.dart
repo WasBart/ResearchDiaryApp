@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:research_diary_app/addentry_page_sound.dart';
 import 'package:research_diary_app/day_page.dart';
+import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // TODO: Make a scrollable view that loads clickable entries for days
 // days are determined by what entries per day exist for users
@@ -101,6 +104,7 @@ class _OverviewPageState extends State<OverviewPage> {
       );
     }
     */
+
     // TODO: Call backend and get all entries for days and create buttons in dayList for each day
     List entriesList = await getEntries();
     datesList = [];
@@ -140,6 +144,8 @@ class _OverviewPageState extends State<OverviewPage> {
             print(entriesPerDayMap);
           });
         }));
+
+        
   }
 
   Future<List> getEntries() async {

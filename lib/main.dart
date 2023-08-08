@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:research_diary_app/home_page.dart';
+import 'package:research_diary_app/notification_service.dart';
 
 // TODO: Add 'Rewards'-page that shows all unlocked audio files
 
-void main() {
+late final NotificationService notificationService;
+
+Future<void> main() async {
   runApp(const MyApp());
 }
 
@@ -29,6 +32,11 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   int currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,9 +5,25 @@ import 'package:research_diary_app/overview_page.dart';
 import 'package:research_diary_app/addentry_page.dart';
 import 'package:research_diary_app/sound_example.dart';
 import 'package:research_diary_app/util.dart';
+import 'package:research_diary_app/notification_service.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final NotificationService notificationService;
+
+  @override
+  void initState(){
+    super.initState();
+
+    notificationService = NotificationService();
+    notificationService.init().then((value) => notificationService.showNotification(id: 1, title: "sample title", body: "it works"));
+  }
 
   @override
   Widget build(BuildContext context) {
