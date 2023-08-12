@@ -230,7 +230,8 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
             },
-            body: jsonEncode(<String, String>{'text': textController.text}));
+            body: jsonEncode(<String, String>{'text': textController.text,
+            'date': pickedDate.toString()}));
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
