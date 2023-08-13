@@ -213,7 +213,7 @@ class _DayPageState extends State<DayPage> {
   }
 
   void deleteEntryFromDb(int entryId) async {
-    http.Response response = await http.delete(Uri.parse("http://10.0.2.2:8008/text_notes/$entryId"), headers: <String, String>{
+    http.Response response = await http.delete(Uri.parse("http://83.229.85.185/text_notes/$entryId"), headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
         print("statusCode: "  + response.statusCode.toString());

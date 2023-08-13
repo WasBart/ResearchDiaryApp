@@ -35,7 +35,7 @@ class _OverviewPageState extends State<OverviewPage> {
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
-        print(entriesPerDayMap);
+        //print(entriesPerDayMap);
       });
     });
 
@@ -129,6 +129,7 @@ class _OverviewPageState extends State<OverviewPage> {
       loadedDayList.add(ElevatedButton(
           onPressed: () => createDayPage(value), child: Text(key)));
     });
+    print(datesList);
     // TODO: get dates for elements and if they do not exist in daysList, add them to days list
     // TODO: create buttons for each day that link to day pages for the days
   }
@@ -141,7 +142,7 @@ class _OverviewPageState extends State<OverviewPage> {
     ).then((value) => createDaysList().then((value) {
           setState(() {
             dayList = loadedDayList;
-            print(entriesPerDayMap);
+            //print("entries per day map: $entriesPerDayMap");
           });
         }));
 
@@ -150,7 +151,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   Future<List> getEntries() async {
     http.Response response = await http.get(
-        Uri.parse("http://10.0.2.2:8008/text_notes/"),
+        Uri.parse("http://83.229.85.185/text_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });

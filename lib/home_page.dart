@@ -31,15 +31,7 @@ class _HomePageState extends State<HomePage> {
     notificationService.init().then((value) => notificationService
         .showNotification(id: 1, title: "sample title", body: "it works"));
 
-    getEnteredDays().then((value) {
-      setState(() {
-        researcherNotesButton = ElevatedButton(
-            onPressed: setResearcherNotesButtonActive()
-                ? researcherNotesButtonOnPressed
-                : null,
-            child: Text(numberOfDays.toString()));
-      });
-    });
+    updateNumberOfDays();
   }
 
   @override
@@ -55,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (BuildContext context) {
                     return const AddEntryPageSound();
                   }),
-                );
+                ).then((value) => updateNumberOfDays());
               },
               child: const Text('Create New Entry'),
             ),
@@ -65,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (BuildContext context) {
                     return OverviewPage();
                   }),
-                );
+                ).then((value) => updateNumberOfDays());
               },
               child: const Text('Overview'),
             ),
@@ -83,12 +75,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool setResearcherNotesButtonActive() {
-   if(numberOfDays > 0) {
-    return true;
-   }
-    else {
+    if (numberOfDays > 0) {
+      return true;
+    } else {
       return false;
     }
+  }
+
+  void updateNumberOfDays() {
+    getEnteredDays().then((value) {
+      setState(() {
+        researcherNotesButton = ElevatedButton(
+            onPressed: setResearcherNotesButtonActive()
+                ? researcherNotesButtonOnPressed
+                : null,
+            child: Text(numberOfDays.toString()));
+      });
+    });
   }
 
   Future getEnteredDays() async {
@@ -101,12 +104,14 @@ class _HomePageState extends State<HomePage> {
         datesList.add(entryDate);
       }
     }
-    numberOfDays = datesList.length;
+    setState(() {
+      numberOfDays = datesList.length;
+    });
   }
 
   Future<List> getEntries() async {
     http.Response response = await http.get(
-        Uri.parse("http://10.0.2.2:8008/text_notes/"),
+        Uri.parse("http://83.229.85.185/text_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });

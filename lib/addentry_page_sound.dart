@@ -225,7 +225,7 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
       } else {
         String? id = await _getId();
         http.Response response = await http.put(
-            Uri.parse("http://10.0.2.2:8008/text_notes/"),
+            Uri.parse("http://83.229.85.185/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
