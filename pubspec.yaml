@@ -47,6 +47,7 @@ dependencies:
   rxdart: ^0.27.5
   http: ^0.13.4
   flutter_native_timezone: ^2.0.0
+  http_parser: ^4.0.2
   
 
 dev_dependencies:

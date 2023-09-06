@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -219,9 +220,11 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
         showCustomDialog(context, "Error",
             "Please select a date and enter some text.", confirmActions);
       } else if (textController.text == "") {
-        showCustomDialog(context, "Error", "Please enter some text.", confirmActions);
+        showCustomDialog(
+            context, "Error", "Please enter some text.", confirmActions);
       } else if (pickedDate == null) {
-        showCustomDialog(context, "Error", "Please select a date.", confirmActions);
+        showCustomDialog(
+            context, "Error", "Please select a date.", confirmActions);
       } else {
         String? id = await _getId();
         http.Response response = await http.put(
@@ -230,20 +233,42 @@ class _AddEntryPageSoundState extends State<AddEntryPageSound> {
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
             },
-            body: jsonEncode(<String, String>{'text': textController.text,
-            'date': pickedDate.toString()}));
+            body: jsonEncode(<String, String>{
+              'text': textController.text,
+              'date': pickedDate.toString()
+            }));
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
-        showCustomDialog(
-            context, "Entry saved", "Your entry has been saved.", confirmActions);
+        showCustomDialog(context, "Entry saved", "Your entry has been saved.",
+            confirmActions);
       }
     } else if (textOrAudio == 'Audio') {
       if (pickedDate == null) {
-        showCustomDialog(context, "Error", "Please select a date.", confirmActions);
+        showCustomDialog(
+            context, "Error", "Please select a date.", confirmActions);
+      } else {
+        await uploadFile();
+        showCustomDialog(context, "Entry saved",
+            "Your sound entry has been saved.", confirmActions);
       }
     }
     //showCustomDialog(context, "Entry saved", "Your entry has been saved.", "OK");
+  }
+
+  Future<void> uploadFile() async {
+    var uri = Uri.http('192.168.0.189', '/new_voice_notes/');
+    //Uri.parse('http://10.0.2.2:')
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['x-token'] = "123"
+      ..fields['date'] = pickedDate.toString()
+      ..files.add(await http.MultipartFile.fromPath(
+          'in_file', '/sdcard/Download/test.wav',
+          contentType: MediaType('audio', 'wav')));
+    var response = await request.send();
+    print(response.statusCode);
+    print(await response.stream.bytesToString());
+    if (response.statusCode == 200) print('Uploaded!');
   }
 
   Future<String?> _getId() async {
