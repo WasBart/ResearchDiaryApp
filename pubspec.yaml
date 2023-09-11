@@ -48,6 +48,9 @@ dependencies:
   http: ^0.13.4
   flutter_native_timezone: ^2.0.0
   http_parser: ^4.0.2
+  audio_waveforms: ^1.0.4
+  audioplayers: ^5.1.0
+  file_picker: ^5.5.0
   
 
 dev_dependencies:
@@ -72,6 +75,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
