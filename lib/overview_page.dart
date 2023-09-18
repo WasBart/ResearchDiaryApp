@@ -3,6 +3,7 @@ import 'package:research_diary_app/addentry_page_sound.dart';
 import 'package:research_diary_app/day_page.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/util.dart';
+import 'package:research_diary_app/globals.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -145,13 +146,11 @@ class _OverviewPageState extends State<OverviewPage> {
             //print("entries per day map: $entriesPerDayMap");
           });
         }));
-
-        
   }
 
   Future<List> getEntries() async {
     http.Response response = await http.get(
-        Uri.parse("http://83.229.85.185/text_notes/"),
+        Uri.parse("http://${localAdress}/text_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -160,6 +159,18 @@ class _OverviewPageState extends State<OverviewPage> {
 
     var convResp = response.body;
     List respList = json.decode(convResp);
+
+    response = await http.get(Uri.parse("http://${localAdress}/voice_notes/"),
+        headers: <String, String>{
+          'x-token': '123' // TODO: change to actual id
+        });
+    convResp = response.body;
+    List audioRespList = json.decode(convResp);
+
+    respList.addAll(audioRespList);
+    //respList.sort(((a, b) =>
+    //    DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"]))));
+    print(respList);
     return respList;
   }
 }

@@ -11,6 +11,8 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
+
+import 'package:research_diary_app/globals.dart';
 //import 'package:audioplayers/audio_cache.dart';
 
 // TODO: add researcher voice notes as assets in pubspec file
@@ -145,6 +147,13 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
     //audioPlayer.release();
     audioPlayer.dispose();
     //audioCache.clearCache();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -297,7 +306,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       } else {
         String? id = await _getId();
         http.Response response = await http.put(
-            Uri.parse("http://83.229.85.185/text_notes/"),
+            Uri.parse("${localAdress}/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
@@ -317,7 +326,12 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       if (pickedDate == null) {
         showCustomDialog(
             context, "Error", "Please select a date.", confirmActions);
-      } else {
+      } 
+      else if (path == null) {
+        showCustomDialog(
+            context, "Error", "Please record a voice note", confirmActions);
+      }
+      else {
         await uploadFile();
         showCustomDialog(context, "Entry saved",
             "Your sound entry has been saved.", confirmActions);
@@ -327,14 +341,14 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
   }
 
   Future<void> uploadFile() async {
-    var uri = Uri.http('192.168.0.189', '/new_voice_notes/');
+    var uri = Uri.http('${localAdress}', '/new_voice_notes/');
     //Uri.parse('http://10.0.2.2:')
     var request = http.MultipartRequest('POST', uri)
       ..headers['x-token'] = "123"
       ..fields['date'] = pickedDate.toString()
       ..files.add(await http.MultipartFile.fromPath(
-          'in_file', '/sdcard/Download/test.wav',
-          contentType: MediaType('audio', 'wav')));
+          'in_file', path!,
+          contentType: MediaType('audio', 'm4a')));
     var response = await request.send();
     print(response.statusCode);
     print(await response.stream.bytesToString());

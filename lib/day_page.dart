@@ -1,10 +1,17 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:research_diary_app/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:research_diary_app/util.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 // TODO: insert scrollable view for if there are too many textfields and voice recording
 // TODO: set the date in the appbar with the date of the day, load all files that correspond to the same date
@@ -82,6 +89,9 @@ class _DayPageState extends State<DayPage> {
   var _controllerText = TextEditingController();
   String titleDate = "";
 
+  List<AudioPlayer> audioPlayers = [];
+  List<PlayerState> playerStates = [];
+
 
   @override
   void initState() {
@@ -98,9 +108,19 @@ class _DayPageState extends State<DayPage> {
 
   @override
   void dispose() {
+    super.dispose();
     // Clean up the controller when the widget is disposed.
     myController.dispose();
-    super.dispose();
+    for(AudioPlayer ap in audioPlayers) {
+      ap.dispose();
+    }
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
   }
 
   /*Future<File> _incrementCounter() {
@@ -163,12 +183,48 @@ class _DayPageState extends State<DayPage> {
       createdEntries.add(deleteButton);
     }*/
     int listIndex = 0;
+    int voiceNoteIndex = 1;
 
     for(int i = 0; i < widget.assignedEntriesList.length; i++) {
-      TextField tf = TextField(enabled: false, controller: TextEditingController(text: widget.assignedEntriesList[i]["text"]));
-      createdEntries.add(tf);
-      ElevatedButton dButton = ElevatedButton(onPressed: () => {handleDeleteDialog(widget.assignedEntriesList[i]["text"], i, widget.assignedEntriesList[i]["id"])}, child: const Icon(Icons.delete));
-      createdEntries.add(dButton);
+      var currentText = widget.assignedEntriesList[i]["text"];
+      print(currentText);
+      print(widget.assignedEntriesList[i]);
+      List<Widget> temp = [];
+      if(currentText == null) {
+        int currentId = widget.assignedEntriesList[i]["id"];
+        AudioPlayer ap = AudioPlayer();
+        PlayerState state = PlayerState.paused;
+        IconButton ib = IconButton(icon: const Icon(Icons.play_arrow),
+          tooltip: 'Play/Pause recording',
+          onPressed: () {
+            playSound(ap, currentId);
+          });
+        ap.onPlayerStateChanged.listen((PlayerState newState) {
+          print("player state change listener called");
+          state = newState;
+          setState(() {
+            if(state == PlayerState.playing) {
+              ib = IconButton(onPressed: () => pauseSound(ap), icon: Icon(Icons.pause));
+            }
+            else if(state == PlayerState.paused) {
+              ib = IconButton(onPressed: () => resumeSound(ap), icon: Icon(Icons.play_arrow));
+            }
+          });});
+        audioPlayers.add(ap);
+        playerStates.add(state);
+        temp.add(TextField(enabled: false, controller: TextEditingController(text: "Voice Note $voiceNoteIndex")));
+        temp.add(ib);
+        voiceNoteIndex++;
+        
+        setState(() { createdEntries.addAll(temp);});
+
+      }
+      else {
+        TextField tf = TextField(enabled: false, controller: TextEditingController(text: widget.assignedEntriesList[i]["text"]));
+        createdEntries.add(tf);
+        ElevatedButton dButton = ElevatedButton(onPressed: () => {handleDeleteDialog(widget.assignedEntriesList[i]["text"], i, widget.assignedEntriesList[i]["id"])}, child: const Icon(Icons.delete));
+        createdEntries.add(dButton);
+      }
     }
 
     /*widget.assignedEntriesList.forEach((element) { 
@@ -183,21 +239,48 @@ class _DayPageState extends State<DayPage> {
     });*/
   }
 
+  void playSound(AudioPlayer ap, int id) async {
+    for(PlayerState ps in playerStates) {
+      if(ps == PlayerState.playing) {
+        return;
+      }
+    }
+    http.Response response = await http.get(
+        Uri.parse("http://${localAdress}/voice_note/${id}/"),
+        headers: <String, String>{
+          'x-token': '123' // TODO: change to actual id
+        });
+    //print("statusCode: "  + response.statusCode.toString());
+    // TODO: status code überprüfen ob 200 sonst error message und error handling
+
+    var convResp = response.bodyBytes;
+
+    ap.play(BytesSource(convResp));
+  }
+
+  void pauseSound(AudioPlayer ap) {
+    ap.pause();
+  }
+
+  void resumeSound(AudioPlayer ap) {
+    ap.resume();
+  }
+
   void handleDeleteDialog(String entryText, int listIndex, int entryId) {
     List<Widget> deleteActions = [TextButton(
         child: Text("Cancel"),
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(this.context).pop();
         },
       ),
       TextButton(
         child: Text("Confirm", style:TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () {
           deleteEntry(listIndex, entryId);
-          Navigator.of(context).pop();
+          Navigator.of(this.context).pop();
         },
       )];
-    showCustomDialog(context, "Delete Entry?", "Are you sure you want to delete this entry: \"$entryText\"", deleteActions);
+    showCustomDialog(this.context, "Delete Entry?", "Are you sure you want to delete this entry: \"$entryText\"", deleteActions);
   }
 
   void deleteEntry(int listIndex, int entryId) {
