@@ -7,6 +7,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:research_diary_app/globals.dart';
+import 'package:research_diary_app/audio_card.dart';
+import 'package:research_diary_app/text_card.dart';
+import 'package:research_diary_app/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -58,15 +61,18 @@ class EntryCard {
   TextField tF;
   ElevatedButton dButton;
 
-  EntryCard({required int this.listId, required String this.dbId, required String this.text, required TextField this.tF, required ElevatedButton this.dButton});
+  EntryCard(
+      {required int this.listId,
+      required String this.dbId,
+      required String this.text,
+      required TextField this.tF,
+      required ElevatedButton this.dButton});
 
   void removeFromList(List targetList) {
     targetList.removeAt(listId);
   }
 
-  void deleteFromDatabase() {
-
-  }
+  void deleteFromDatabase() {}
 }
 
 class DayPage extends StatefulWidget {
@@ -84,14 +90,19 @@ class _DayPageState extends State<DayPage> {
   final myController = TextEditingController();
   List<Widget> entryWidgets = [];
   List<Widget> createdEntries = [];
-  ElevatedButton playButton = ElevatedButton(onPressed: () {}, child: const Icon(Icons.play_arrow)); //TODO: make button actually play the corresponding audio file
-  ElevatedButton deleteButton = ElevatedButton(onPressed: () {}, child: const Icon(Icons.delete));
+  ElevatedButton playButton = ElevatedButton(
+      onPressed: () {},
+      child: const Icon(Icons
+          .play_arrow)); //TODO: make button actually play the corresponding audio file
+  ElevatedButton deleteButton =
+      ElevatedButton(onPressed: () {}, child: const Icon(Icons.delete));
   var _controllerText = TextEditingController();
   String titleDate = "";
 
   List<AudioPlayer> audioPlayers = [];
   List<PlayerState> playerStates = [];
 
+  List<Widget> entryCards = [];
 
   @override
   void initState() {
@@ -111,14 +122,14 @@ class _DayPageState extends State<DayPage> {
     super.dispose();
     // Clean up the controller when the widget is disposed.
     myController.dispose();
-    for(AudioPlayer ap in audioPlayers) {
+    for (AudioPlayer ap in audioPlayers) {
       ap.dispose();
     }
   }
 
   @override
   void setState(VoidCallback fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -152,10 +163,15 @@ class _DayPageState extends State<DayPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: ListView(
-                children: createdEntries,
-              ),
-            )
+                child: ListView.separated(
+              padding: const EdgeInsets.all(8),
+              itemCount: entryCards.length,
+              itemBuilder: (BuildContext context, int index) {
+                return entryCards[index];
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+            ))
           ]),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -167,7 +183,7 @@ class _DayPageState extends State<DayPage> {
 
   String getTitleDate() {
     print(widget.assignedEntriesList[0]["date"]);
-    
+
     String fullDate = widget.assignedEntriesList[0]["date"];
     String shortDate = fullDate.substring(0, fullDate.indexOf("T"));
     return shortDate;
@@ -185,45 +201,70 @@ class _DayPageState extends State<DayPage> {
     int listIndex = 0;
     int voiceNoteIndex = 1;
 
-    for(int i = 0; i < widget.assignedEntriesList.length; i++) {
+    for (int i = 0; i < widget.assignedEntriesList.length; i++) {
       var currentText = widget.assignedEntriesList[i]["text"];
       print(currentText);
       print(widget.assignedEntriesList[i]);
       List<Widget> temp = [];
-      if(currentText == null) {
+      if (currentText == null) {
         int currentId = widget.assignedEntriesList[i]["id"];
         AudioPlayer ap = AudioPlayer();
         PlayerState state = PlayerState.paused;
-        IconButton ib = IconButton(icon: const Icon(Icons.play_arrow),
-          tooltip: 'Play/Pause recording',
-          onPressed: () {
-            playSound(ap, currentId);
-          });
+        IconButton ib = IconButton(
+            icon: const Icon(Icons.play_arrow),
+            tooltip: 'Play/Pause recording',
+            onPressed: () {
+              playSound(ap, currentId);
+            });
         ap.onPlayerStateChanged.listen((PlayerState newState) {
           print("player state change listener called");
           state = newState;
           setState(() {
-            if(state == PlayerState.playing) {
-              ib = IconButton(onPressed: () => pauseSound(ap), icon: Icon(Icons.pause));
+            if (state == PlayerState.playing) {
+              ib = IconButton(
+                  onPressed: () => pauseSound(ap), icon: Icon(Icons.pause));
+            } else if (state == PlayerState.paused) {
+              ib = IconButton(
+                  onPressed: () => resumeSound(ap),
+                  icon: Icon(Icons.play_arrow));
             }
-            else if(state == PlayerState.paused) {
-              ib = IconButton(onPressed: () => resumeSound(ap), icon: Icon(Icons.play_arrow));
-            }
-          });});
+          });
+        });
         audioPlayers.add(ap);
         playerStates.add(state);
-        temp.add(TextField(enabled: false, controller: TextEditingController(text: "Voice Note $voiceNoteIndex")));
+        temp.add(TextField(
+            enabled: false,
+            controller:
+                TextEditingController(text: "Voice Note $voiceNoteIndex")));
         temp.add(ib);
-        voiceNoteIndex++;
-        
-        setState(() { createdEntries.addAll(temp);});
 
-      }
-      else {
-        TextField tf = TextField(enabled: false, controller: TextEditingController(text: widget.assignedEntriesList[i]["text"]));
+        setState(() {
+          createdEntries.addAll(temp);
+        });
+
+        entryCards.add(AudioCard(
+            "Voice Note $voiceNoteIndex", LocationType.serverBased,
+            dbId: currentId, onDeleted: () => {
+              deleteCardFromList(i)
+            },));
+        voiceNoteIndex++;
+      } else {
+        TextField tf = TextField(
+            enabled: false,
+            controller: TextEditingController(
+                text: widget.assignedEntriesList[i]["text"]));
         createdEntries.add(tf);
-        ElevatedButton dButton = ElevatedButton(onPressed: () => {handleDeleteDialog(widget.assignedEntriesList[i]["text"], i, widget.assignedEntriesList[i]["id"])}, child: const Icon(Icons.delete));
+        ElevatedButton dButton = ElevatedButton(
+            onPressed: () => {
+                  handleDeleteDialog(widget.assignedEntriesList[i]["text"], i,
+                      widget.assignedEntriesList[i]["id"])
+                },
+            child: const Icon(Icons.delete));
         createdEntries.add(dButton);
+
+        entryCards.add(TextCard(widget.assignedEntriesList[i]["text"], widget.assignedEntriesList[i]["id"], onDeleted: () => {
+          deleteCardFromList(i)
+        }));
       }
     }
 
@@ -240,8 +281,8 @@ class _DayPageState extends State<DayPage> {
   }
 
   void playSound(AudioPlayer ap, int id) async {
-    for(PlayerState ps in playerStates) {
-      if(ps == PlayerState.playing) {
+    for (PlayerState ps in playerStates) {
+      if (ps == PlayerState.playing) {
         return;
       }
     }
@@ -267,39 +308,55 @@ class _DayPageState extends State<DayPage> {
   }
 
   void handleDeleteDialog(String entryText, int listIndex, int entryId) {
-    List<Widget> deleteActions = [TextButton(
+    List<Widget> deleteActions = [
+      TextButton(
         child: Text("Cancel"),
         onPressed: () {
           Navigator.of(this.context).pop();
         },
       ),
       TextButton(
-        child: Text("Confirm", style:TextStyle(fontWeight: FontWeight.bold)),
+        child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () {
           deleteEntry(listIndex, entryId);
           Navigator.of(this.context).pop();
         },
-      )];
-    showCustomDialog(this.context, "Delete Entry?", "Are you sure you want to delete this entry: \"$entryText\"", deleteActions);
+      )
+    ];
+    showCustomDialog(
+        this.context,
+        "Delete Entry?",
+        "Are you sure you want to delete this entry: \"$entryText\"",
+        deleteActions);
+  }
+
+  void deleteCardFromList(int listId) {
+    widget.assignedEntriesList.removeAt(listId);
+    setState(() {
+      createdEntries = [];
+      entryCards = [];
+    });
+    fillCreatedEntriesList();
   }
 
   void deleteEntry(int listIndex, int entryId) {
     // TODO: show alert "are you sure you want to delete this entry?"
-    // TODO: also delete in backend
     print("list index: $listIndex");
     widget.assignedEntriesList.removeAt(listIndex);
     deleteEntryFromDb(entryId);
     setState(() {
-      createdEntries = [];  
+      createdEntries = [];
     });
     fillCreatedEntriesList();
   }
 
   void deleteEntryFromDb(int entryId) async {
-    http.Response response = await http.delete(Uri.parse("http://83.229.85.185/text_notes/$entryId"), headers: <String, String>{
+    http.Response response = await http.delete(
+        Uri.parse("http://83.229.85.185/text_notes/$entryId"),
+        headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
-        print("statusCode: "  + response.statusCode.toString());
-        // TODO: status code überprüfen ob 200 sonst error message und error handling
+    print("statusCode: " + response.statusCode.toString());
+    // TODO: status code überprüfen ob 200 sonst error message und error handling
   }
 }

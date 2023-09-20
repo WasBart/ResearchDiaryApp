@@ -306,7 +306,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       } else {
         String? id = await _getId();
         http.Response response = await http.put(
-            Uri.parse("${localAdress}/text_notes/"),
+            Uri.parse("http://${localAdress}/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
