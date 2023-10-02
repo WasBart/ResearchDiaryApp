@@ -31,48 +31,6 @@ class DiaryEntryStorage {
     debugPrint(directory.path);
     return directory.path;
   }
-
-  /*Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/$filename.txt');
-  }
-
-  Future<String> readFromFile() async {
-    final file = await _localFile;
-
-    // Read the file
-    final contents = await file.readAsString();
-
-    return contents;
-  }
-
-  Future<File> writeToFile(String text) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString('$text\n', mode: FileMode.append);
-  } */
-}
-
-class EntryCard {
-  int listId;
-  String dbId;
-  String text;
-  TextField tF;
-  ElevatedButton dButton;
-
-  EntryCard(
-      {required int this.listId,
-      required String this.dbId,
-      required String this.text,
-      required TextField this.tF,
-      required ElevatedButton this.dButton});
-
-  void removeFromList(List targetList) {
-    targetList.removeAt(listId);
-  }
-
-  void deleteFromDatabase() {}
 }
 
 class DayPage extends StatefulWidget {
@@ -110,11 +68,6 @@ class _DayPageState extends State<DayPage> {
     fillCreatedEntriesList();
     print(widget.assignedEntriesList);
     titleDate = getTitleDate();
-    /*widget.storage.readFromFile().then((value) {
-      setState(() {
-        //_counter = value;
-      });
-    });*/
   }
 
   @override
@@ -133,24 +86,6 @@ class _DayPageState extends State<DayPage> {
       super.setState(fn);
     }
   }
-
-  /*Future<File> _incrementCounter() {
-    setState(() {});
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          // Retrieve the text that the user has entered by using the
-          // TextEditingController.
-          content: Text(myController.text),
-        );
-      },
-    );
-
-    // Write the variable as a string to the file.
-    //return widget.storage.writeToFile(myController.text);
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -192,12 +127,6 @@ class _DayPageState extends State<DayPage> {
   void fillCreatedEntriesList() {
     // TODO: fill list with textentries + delete button and voice entries + play and delete button
     // TODO: replace controller with a different solution, otherwise all entries will have the same text
-    /*for(int i = 0; i < 25; i++)
-    {
-      _controllerText.text = "Test Text $i";
-      createdEntries.add(TextField(enabled: false, controller: _controllerText));
-      createdEntries.add(deleteButton);
-    }*/
     int listIndex = 0;
     int voiceNoteIndex = 1;
 
@@ -208,39 +137,6 @@ class _DayPageState extends State<DayPage> {
       List<Widget> temp = [];
       if (currentText == null) {
         int currentId = widget.assignedEntriesList[i]["id"];
-        AudioPlayer ap = AudioPlayer();
-        PlayerState state = PlayerState.paused;
-        IconButton ib = IconButton(
-            icon: const Icon(Icons.play_arrow),
-            tooltip: 'Play/Pause recording',
-            onPressed: () {
-              playSound(ap, currentId);
-            });
-        ap.onPlayerStateChanged.listen((PlayerState newState) {
-          print("player state change listener called");
-          state = newState;
-          setState(() {
-            if (state == PlayerState.playing) {
-              ib = IconButton(
-                  onPressed: () => pauseSound(ap), icon: Icon(Icons.pause));
-            } else if (state == PlayerState.paused) {
-              ib = IconButton(
-                  onPressed: () => resumeSound(ap),
-                  icon: Icon(Icons.play_arrow));
-            }
-          });
-        });
-        audioPlayers.add(ap);
-        playerStates.add(state);
-        temp.add(TextField(
-            enabled: false,
-            controller:
-                TextEditingController(text: "Voice Note $voiceNoteIndex")));
-        temp.add(ib);
-
-        setState(() {
-          createdEntries.addAll(temp);
-        });
 
         entryCards.add(AudioCard(
             "Voice Note $voiceNoteIndex", LocationType.serverBased,
@@ -267,44 +163,6 @@ class _DayPageState extends State<DayPage> {
         }));
       }
     }
-
-    /*widget.assignedEntriesList.forEach((element) { 
-      TextField tf = TextField(enabled: false, controller: TextEditingController(text: element["text"]));
-      createdEntries.add(tf);
-      ElevatedButton dButton = ElevatedButton(onPressed: () => {deleteEntry(listIndex, element["id"])}, child: const Icon(Icons.delete));
-      createdEntries.add(dButton);
-      //EntryCard ec = EntryCard(listId: listIndex, dbId: element["id"], text: element["text"], tF: tf, dButton: dButton);
-      listIndex++; // TODO: Implement delete button to delete previous text entry from local list and database
-      // TODO: Add confirmation text box for delete
-    // TODO: add audio entry widgets (possibly as disabled textfield saying "audio entry x") with play button and delete button
-    });*/
-  }
-
-  void playSound(AudioPlayer ap, int id) async {
-    for (PlayerState ps in playerStates) {
-      if (ps == PlayerState.playing) {
-        return;
-      }
-    }
-    http.Response response = await http.get(
-        Uri.parse("http://${localAdress}/voice_note/${id}/"),
-        headers: <String, String>{
-          'x-token': '123' // TODO: change to actual id
-        });
-    //print("statusCode: "  + response.statusCode.toString());
-    // TODO: status code überprüfen ob 200 sonst error message und error handling
-
-    var convResp = response.bodyBytes;
-
-    ap.play(BytesSource(convResp));
-  }
-
-  void pauseSound(AudioPlayer ap) {
-    ap.pause();
-  }
-
-  void resumeSound(AudioPlayer ap) {
-    ap.resume();
   }
 
   void handleDeleteDialog(String entryText, int listIndex, int entryId) {
@@ -343,20 +201,10 @@ class _DayPageState extends State<DayPage> {
     // TODO: show alert "are you sure you want to delete this entry?"
     print("list index: $listIndex");
     widget.assignedEntriesList.removeAt(listIndex);
-    deleteEntryFromDb(entryId);
+    deleteTextNoteFromServer(entryId);
     setState(() {
       createdEntries = [];
     });
     fillCreatedEntriesList();
-  }
-
-  void deleteEntryFromDb(int entryId) async {
-    http.Response response = await http.delete(
-        Uri.parse("http://83.229.85.185/text_notes/$entryId"),
-        headers: <String, String>{
-          'x-token': '123' // TODO: change to actual id
-        });
-    print("statusCode: " + response.statusCode.toString());
-    // TODO: status code überprüfen ob 200 sonst error message und error handling
   }
 }

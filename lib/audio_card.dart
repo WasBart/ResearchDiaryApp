@@ -6,6 +6,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/util.dart';
 
+//TODO: add delete button in the upper right corner
+
 enum LocationType { assets, local, serverBased }
 
 class AudioCard extends StatefulWidget {
@@ -27,14 +29,41 @@ class _AudioCardState extends State<AudioCard> {
   AudioPlayer player = AudioPlayer();
   PlayerState state = PlayerState.paused;
   bool loaded = false;
+  int timeProgress = 0;
+  int audioDuration = 0;
+  late Source audioSource;
+
+  Widget slider() {
+    return Container(
+        width: 300,
+        height: 20,
+        child: Slider.adaptive(
+            value: (timeProgress / 1000).floorToDouble(),
+            max: (audioDuration / 1000).floorToDouble(),
+            onChanged: (value) {
+              seekToSec(value.toInt());
+            }));
+  }
 
   @override
   void initState() {
     super.initState();
 
+    Future.delayed(Duration.zero, () async {
+      Duration? duration = await getDuration();
+      audioDuration = duration!.inMilliseconds;
+    });
+
     player.onPlayerStateChanged.listen((PlayerState newState) {
       setState(() {
         state = newState;
+      });
+    });
+
+    player.onPositionChanged.listen((Duration duration) async {
+      setState(() {
+        timeProgress = duration.inMilliseconds;
+        print("NewDuration: $duration");
       });
     });
   }
@@ -55,41 +84,97 @@ class _AudioCardState extends State<AudioCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: TextField(
-              enabled: false,
-              controller: TextEditingController(text: widget.title)),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(0),
+      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        color: const Color(0x1f000000),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.zero,
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: IconButton(
-                  onPressed: () => {
-                        state == PlayerState.playing
-                            ? pauseAudio()
-                            : playAudio()
-                      },
-                  icon: state == PlayerState.playing
-                      ? const Icon(Icons.pause)
-                      : const Icon(Icons.play_arrow)),
+            Row(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.title,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 240),
+                Align(alignment: Alignment.topRight,
+                child: IconButton(icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
+              ],
             ),
-            Flexible(
-                fit: FlexFit.loose,
-                child: IconButton(
-                    onPressed: deleteVoiceNote, icon: Icon(Icons.delete)))
+            IconButton(
+              icon: Icon(state == PlayerState.playing
+                  ? Icons.pause
+                  : Icons.play_arrow),
+              onPressed: () {
+                state == PlayerState.playing ? pauseAudio() : playAudio();
+              },
+              color: const Color(0xff212435),
+              iconSize: 24,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Text(
+                    getTimeString(timeProgress),
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                ),
+                Expanded(child: slider()),
+                Expanded(
+                  child: Text(
+                    getTimeString(audioDuration),
+                    textAlign: TextAlign.end,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-      ],
+      ),
     );
   }
 
-  void playAudio() async {
+  Future<Duration?> getDuration() async {
     if (widget.locationType == LocationType.serverBased && !loaded) {
       if (widget.dbId != null) {
         // Load file from server in path variable
@@ -98,8 +183,23 @@ class _AudioCardState extends State<AudioCard> {
       loaded = true;
     }
 
-    Source curSource = getSource();
-    await player.play(curSource);
+    audioSource = getSource();
+    await player.setSource(audioSource);
+    Duration? duration = await player.getDuration();
+    return duration;
+  }
+
+  String getTimeString(int milliseconds) {
+    if (milliseconds == null) milliseconds = 0;
+    String minutes =
+        '${(milliseconds / 60000).floor() < 10 ? 0 : ''}${(milliseconds / 60000).floor()}';
+    String seconds =
+        '${(milliseconds / 1000).floor() % 60 < 10 ? 0 : ''}${(milliseconds / 1000).floor() % 60}';
+    return '$minutes:$seconds';
+  }
+
+  void playAudio() async {
+    await player.play(audioSource);
   }
 
   void pauseAudio() async {
@@ -145,5 +245,10 @@ class _AudioCardState extends State<AudioCard> {
         "Delete Entry?",
         "Are you sure you want to delete this entry: \"${widget.title}\"",
         deleteActions);
+  }
+
+  void seekToSec(int sec) {
+    Duration newPosition = Duration(seconds: sec);
+    player.seek(newPosition);
   }
 }

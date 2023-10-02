@@ -5,9 +5,11 @@ import 'dart:convert';
 
 import 'package:research_diary_app/globals.dart';
 
-void postTextNoteToServer(String text, String date) async {
+// TODO: figure out where to call getId and set the new id for all functions of this module
+
+Future<http.Response> postTextNoteToServer(String text, String date) async {
   http.Response response = await http.put(
-            Uri.parse("${localAdress}/text_notes/"),
+            Uri.parse("$serverAdress/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
@@ -16,13 +18,14 @@ void postTextNoteToServer(String text, String date) async {
               'text': text,
               'date': date
             }));
+        return response;
         //print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
 }
 
 Future<List> getTextNotesFromServer() async {
   http.Response response = await http.get(
-        Uri.parse("http://${localAdress}/text_notes/"),
+        Uri.parse("http://$serverAdress/text_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -34,15 +37,15 @@ Future<List> getTextNotesFromServer() async {
 }
 
 Future<void> deleteTextNoteFromServer(int textNoteId) async {
-   http.Response response = await http.delete(Uri.parse("http://${localAdress}/text_notes/$textNoteId"), headers: <String, String>{
+   http.Response response = await http.delete(Uri.parse("http://$serverAdress/text_notes/$textNoteId"), headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
         print("statusCode: "  + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
 }
 
-void postVoiceNoteToServer(String path, String date) async {
-  var uri = Uri.http('${localAdress}', '/new_voice_notes/');
+Future<void> postVoiceNoteToServer(String path, String date) async {
+  var uri = Uri.http('$serverAdress', '/new_voice_notes/');
     //Uri.parse('http://10.0.2.2:')
     var request = http.MultipartRequest('POST', uri)
       ..headers['x-token'] = "123" // TODO change to actual id
@@ -57,7 +60,7 @@ void postVoiceNoteToServer(String path, String date) async {
 }
 
 Future<List> getVoiceNotesFromServer() async {
-   http.Response response = await http.get(Uri.parse("http://${localAdress}/voice_notes/"),
+   http.Response response = await http.get(Uri.parse("http://$serverAdress/voice_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -67,7 +70,7 @@ Future<List> getVoiceNotesFromServer() async {
 
 Future<Uint8List> getVoiceNoteFromServer(int voiceNoteId) async {
   http.Response response = await http.get(
-        Uri.parse("http://${localAdress}/voice_note/$voiceNoteId/"),
+        Uri.parse("http://$serverAdress/voice_note/$voiceNoteId/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -78,7 +81,7 @@ Future<Uint8List> getVoiceNoteFromServer(int voiceNoteId) async {
 }
 
 Future<void> deleteVoiceNoteFromServer(int voiceNoteId) async {
-   http.Response response = await http.delete(Uri.parse("http://${localAdress}/voice_notes/$voiceNoteId"), headers: <String, String>{
+   http.Response response = await http.delete(Uri.parse("http://$serverAdress/voice_notes/$voiceNoteId"), headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
         print("statusCode: "  + response.statusCode.toString());

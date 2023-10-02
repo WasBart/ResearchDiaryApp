@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:research_diary_app/addentry_page_sound.dart';
 import 'package:research_diary_app/day_page.dart';
 import 'package:research_diary_app/notification_service.dart';
+import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/globals.dart';
 import 'package:http/http.dart' as http;
@@ -39,34 +40,6 @@ class _OverviewPageState extends State<OverviewPage> {
         //print(entriesPerDayMap);
       });
     });
-
-    /*Navigator.of(context).push(MaterialPageRoute(
-      builder: 
-      (context) => DayPage(assignedEntriesList: [],),
-      ),
-    ).then((_) {
-      createDaysList().then((value){
-      setState(() {
-        dayList = loadedDayList;
-        print(entriesPerDayMap);
-      });
-    });
-      // Call setState() here or handle this appropriately
-    });*/
-
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => DayPage(
-                assignedEntriesList: [],
-              )),
-    ).then((value) => setState(() {})); */
-    //dayList.add(ElevatedButton(onPressed: createDaysList, child: Text("loadData")));
-    //createDaysList();
-    //createTestDaysList();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    //  createDaysList();
-    //});
   }
 
   @override
@@ -114,7 +87,9 @@ class _OverviewPageState extends State<OverviewPage> {
     */
 
     // TODO: Call backend and get all entries for days and create buttons in dayList for each day
-    List entriesList = await getEntries();
+    List entriesList = await getTextNotesFromServer();
+    List temp = await getVoiceNotesFromServer();
+    entriesList.addAll(temp);
     datesList = [];
     entriesPerDayMap = {};
     loadedDayList = [];
@@ -153,31 +128,5 @@ class _OverviewPageState extends State<OverviewPage> {
             //print("entries per day map: $entriesPerDayMap");
           });
         }));
-  }
-
-  Future<List> getEntries() async {
-    http.Response response = await http.get(
-        Uri.parse("http://${localAdress}/text_notes/"),
-        headers: <String, String>{
-          'x-token': '123' // TODO: change to actual id
-        });
-    //print("statusCode: "  + response.statusCode.toString());
-    // TODO: status code überprüfen ob 200 sonst error message und error handling
-
-    var convResp = response.body;
-    List respList = json.decode(convResp);
-
-    response = await http.get(Uri.parse("http://${localAdress}/voice_notes/"),
-        headers: <String, String>{
-          'x-token': '123' // TODO: change to actual id
-        });
-    convResp = response.body;
-    List audioRespList = json.decode(convResp);
-
-    respList.addAll(audioRespList);
-    //respList.sort(((a, b) =>
-    //    DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"]))));
-    print(respList);
-    return respList;
   }
 }

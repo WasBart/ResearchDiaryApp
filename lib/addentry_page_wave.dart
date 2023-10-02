@@ -13,9 +13,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
 
 import 'package:research_diary_app/globals.dart';
+import 'package:research_diary_app/services.dart';
 //import 'package:audioplayers/audio_cache.dart';
 
 // TODO: add researcher voice notes as assets in pubspec file
+// TODO: delete local voice note file when uploaded or cancelled
 
 const List<String> dropdownList = <String>['Text', 'Audio'];
 
@@ -305,16 +307,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
             context, "Error", "Please select a date.", confirmActions);
       } else {
         String? id = await _getId();
-        http.Response response = await http.put(
-            Uri.parse("http://${localAdress}/text_notes/"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'x-token': '123' // TODO: change to actual ID
-            },
-            body: jsonEncode(<String, String>{
-              'text': textController.text,
-              'date': pickedDate.toString()
-            }));
+        http.Response response = await postTextNoteToServer(textController.text, pickedDate.toString());
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
@@ -332,27 +325,12 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
             context, "Error", "Please record a voice note", confirmActions);
       }
       else {
-        await uploadFile();
+        await postVoiceNoteToServer(path!, pickedDate.toString());
         showCustomDialog(context, "Entry saved",
             "Your sound entry has been saved.", confirmActions);
       }
     }
     //showCustomDialog(context, "Entry saved", "Your entry has been saved.", "OK");
-  }
-
-  Future<void> uploadFile() async {
-    var uri = Uri.http('${localAdress}', '/new_voice_notes/');
-    //Uri.parse('http://10.0.2.2:')
-    var request = http.MultipartRequest('POST', uri)
-      ..headers['x-token'] = "123"
-      ..fields['date'] = pickedDate.toString()
-      ..files.add(await http.MultipartFile.fromPath(
-          'in_file', path!,
-          contentType: MediaType('audio', 'm4a')));
-    var response = await request.send();
-    print(response.statusCode);
-    print(await response.stream.bytesToString());
-    if (response.statusCode == 200) print('Uploaded!');
   }
 
   Future<String?> _getId() async {

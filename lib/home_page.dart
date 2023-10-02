@@ -6,6 +6,7 @@ import 'package:research_diary_app/addentry_page.dart';
 import 'package:research_diary_app/addentry_page_wave.dart';
 import 'package:research_diary_app/play_audio_page.dart';
 import 'package:research_diary_app/rewards_page.dart';
+import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/sound_example.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/notification_service.dart';
@@ -97,7 +98,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getEnteredDays() async {
-    List entriesList = await getEntries();
+    List entriesList = await getTextNotesFromServer();
     List datesList = [];
     for (var element in entriesList) {
       String entryDate = element["date"];
@@ -109,19 +110,5 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       numberOfDays = datesList.length;
     });
-  }
-
-  Future<List> getEntries() async {
-    http.Response response = await http.get(
-        Uri.parse("http://83.229.85.185/text_notes/"),
-        headers: <String, String>{
-          'x-token': '123' // TODO: change to actual id
-        });
-    //print("statusCode: "  + response.statusCode.toString());
-    // TODO: status code überprüfen ob 200 sonst error message und error handling
-
-    var convResp = response.body;
-    List respList = json.decode(convResp);
-    return respList;
   }
 }
