@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:research_diary_app/services.dart';
+import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
 
 //TODO: add delete button in the upper right corner
@@ -86,14 +87,14 @@ class _AudioCardState extends State<AudioCard> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.all(0),
-      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      margin: const EdgeInsets.all(50),
+      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
       width: 200,
       height: 150,
       decoration: BoxDecoration(
-        color: const Color(0x1f000000),
+        color: appTertiaryColor,
         shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.zero,
+        borderRadius: BorderRadius.circular(15.0),
         border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
       ),
       child: Align(
@@ -119,7 +120,7 @@ class _AudioCardState extends State<AudioCard> {
                     ),
                   ),
                 ),
-                SizedBox(width: 240),
+                SizedBox(width: 130),
                 Align(alignment: Alignment.topRight,
                 child: IconButton(icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
               ],

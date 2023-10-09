@@ -9,6 +9,7 @@ import 'package:research_diary_app/rewards_page.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/sound_example.dart';
 import 'package:research_diary_app/util.dart';
+import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -23,7 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final NotificationService notificationService;
   ElevatedButton researcherNotesButton =
-      ElevatedButton(onPressed: () {}, child: Text("Researcher Notes"));
+      ElevatedButton(style: mainButtonStyle, onPressed: () {}, child: Text("Researcher Notes"));
   int numberOfDays = 0;
 
   @override
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: mainButtonStyle,
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
@@ -55,6 +57,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Create New Entry'),
             ),
             ElevatedButton(
+              style: mainButtonStyle,
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {

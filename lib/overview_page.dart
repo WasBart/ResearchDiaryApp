@@ -3,6 +3,7 @@ import 'package:research_diary_app/addentry_page_sound.dart';
 import 'package:research_diary_app/day_page.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/services.dart';
+import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/globals.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,7 @@ class OverviewPage extends StatefulWidget {
 
 class _OverviewPageState extends State<OverviewPage> {
   List<Widget> dayList = [];
-  List<ElevatedButton> loadedDayList = [];
+  List<Widget> loadedDayList = [];
   List<String> datesList = [];
   Map<String, List<Map>> entriesPerDayMap = {};
 
@@ -52,7 +53,10 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBgColor,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: const Text('Overview'),
       ),
       body: Center(
@@ -109,8 +113,21 @@ class _OverviewPageState extends State<OverviewPage> {
       loadedDayList.add(ElevatedButton(onPressed: () {}, child: Text(element)));
     }*/
     entriesPerDayMap.forEach((key, value) {
-      loadedDayList.add(ElevatedButton(
-          onPressed: () => createDayPage(value), child: Text(key)));
+      loadedDayList.add(Container(
+        alignment: Alignment.center,
+      margin: const EdgeInsets.all(80),
+      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        color: appBgColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
+        child: ElevatedButton(
+            onPressed: () => createDayPage(value), child: Text(key), ),
+      ));
     });
     print(datesList);
     // TODO: get dates for elements and if they do not exist in daysList, add them to days list

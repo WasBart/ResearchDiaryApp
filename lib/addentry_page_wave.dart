@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -14,6 +15,7 @@ import 'package:audioplayers/audioplayers.dart' as ap;
 
 import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/services.dart';
+import 'package:research_diary_app/styles.dart';
 //import 'package:audioplayers/audio_cache.dart';
 
 // TODO: add researcher voice notes as assets in pubspec file
@@ -160,81 +162,99 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDF7664),
-      appBar: AppBar(
+    return Container(
+      color: appBgColor,
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        title: const Text('Add New Entry'),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: const Text('Add New Entry'),
+        ),
+        body: Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      //width: 400,
+      height: 300,
+      decoration: BoxDecoration(
+        color: appBgColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
       ),
-      body: Column(
-        children: [
-          TextField(
-              controller: dateController, //editing controller of this TextField
-              decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_today), //icon of text field
-                  labelText: "Enter Date" //label text of field
-                  ),
-              readOnly: true, // when true user cannot edit text
-              onTap: () async {
-                pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(), //get today's date
-                    firstDate: DateTime(
-                        2000), //DateTime.now() - not to allow to choose before today.
-                    lastDate: DateTime(2101));
-                if (pickedDate != null) {
-                  debugPrint(pickedDate
-                      .toString()); //get the picked date in the format => 2022-07-04 00:00:00.000
-                  //String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
-                  //print(formattedDate); //formatted date output using intl package =>  2022-07-04
-                  //You can format date as per your need
-
-                  setState(() {
-                    dateController.text = formatDate(
-                        pickedDate!); //set foratted date to TextField value.
-                  });
-                } else {
-                  debugPrint("Date is not selected");
-                } //when click we have to show the datepicker
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          
+          child: Column(
             children: [
-              const Text('Type:'),
-              DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                underline: Container(
-                  height: 2,
-                ),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    textOrAudio = value;
-                    createInputFields(value);
-                    dropdownValue = value!;
-                  });
-                },
-                items:
-                    dropdownList.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              TextField(
+                  controller: dateController, //editing controller of this TextField
+                  decoration: const InputDecoration(
+                      icon: Icon(Icons.calendar_today), //icon of text field
+                      labelText: "Enter Date" //label text of field
+                      ),
+                  readOnly: true, // when true user cannot edit text
+                  onTap: () async {
+                    pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(), //get today's date
+                        firstDate: DateTime(
+                            2000), //DateTime.now() - not to allow to choose before today.
+                        lastDate: DateTime(2101));
+                    if (pickedDate != null) {
+                      debugPrint(pickedDate
+                          .toString()); //get the picked date in the format => 2022-07-04 00:00:00.000
+                      //String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                      //print(formattedDate); //formatted date output using intl package =>  2022-07-04
+                      //You can format date as per your need
+            
+                      setState(() {
+                        dateController.text = formatDate(
+                            pickedDate!); //set foratted date to TextField value.
+                      });
+                    } else {
+                      debugPrint("Date is not selected");
+                    } //when click we have to show the datepicker
+                  }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text('Type:'),
+                  DropdownButton<String>(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    underline: Container(
+                      height: 2,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        textOrAudio = value;
+                        createInputFields(value);
+                        dropdownValue = value!;
+                      });
+                    },
+                    items:
+                        dropdownList.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
+              for (Widget widget in inputWidgets) widget,
+              ElevatedButton(onPressed: confirmEntry, child: const Text('Confirm')),
             ],
           ),
-          for (Widget widget in inputWidgets) widget,
-          ElevatedButton(onPressed: confirmEntry, child: const Text('Confirm')),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint('Floating Action Button');
-        },
-        child: const Icon(Icons.help_outline),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            debugPrint('Floating Action Button');
+          },
+          child: const Icon(Icons.help_outline),
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/audio_card.dart';
+import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/text_card.dart';
 import 'package:research_diary_app/services.dart';
 
@@ -90,7 +91,10 @@ class _DayPageState extends State<DayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBgColor,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text('Day: $titleDate'),
       ),
       body: Column(
@@ -168,13 +172,13 @@ class _DayPageState extends State<DayPage> {
   void handleDeleteDialog(String entryText, int listIndex, int entryId) {
     List<Widget> deleteActions = [
       TextButton(
-        child: Text("Cancel"),
+        child: const Text("Cancel"),
         onPressed: () {
           Navigator.of(this.context).pop();
         },
       ),
       TextButton(
-        child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
+        child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () {
           deleteEntry(listIndex, entryId);
           Navigator.of(this.context).pop();
