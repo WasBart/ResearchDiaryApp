@@ -16,6 +16,7 @@ import 'package:audioplayers/audioplayers.dart' as ap;
 import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/styles.dart';
+import 'package:research_diary_app/audio_card.dart';
 //import 'package:audioplayers/audio_cache.dart';
 
 // TODO: add researcher voice notes as assets in pubspec file
@@ -114,15 +115,17 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       audioPlayerState = state;
       setState(() {
         recordOrStopButton = IconButton(
-          icon: audioPlayerState == ap.PlayerState.playing
-              ? const Icon(Icons.pause)
-              : const Icon(Icons.play_arrow),
-          tooltip: 'Play/Pause recording',
-          onPressed: () {
-            audioPlayerState == ap.PlayerState.playing ? pauseSound() : playSound();
-          });
-          inputWidgets.removeLast();
-          inputWidgets.add(recordOrStopButton);
+            icon: audioPlayerState == ap.PlayerState.playing
+                ? const Icon(Icons.pause)
+                : const Icon(Icons.play_arrow),
+            tooltip: 'Play/Pause recording',
+            onPressed: () {
+              audioPlayerState == ap.PlayerState.playing
+                  ? pauseSound()
+                  : playSound();
+            });
+        inputWidgets.removeLast();
+        inputWidgets.add(recordOrStopButton);
       });
     });
   }
@@ -155,7 +158,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
 
   @override
   void setState(VoidCallback fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -172,22 +175,22 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
           title: const Text('Add New Entry'),
         ),
         body: Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-      //width: 400,
-      height: 300,
-      decoration: BoxDecoration(
-        color: appBgColor,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(15.0),
-        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
-      ),
-          
+          alignment: Alignment.center,
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+          width: 400,
+          height: 500,
+          decoration: BoxDecoration(
+            color: appBgColor,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(15.0),
+            border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+          ),
           child: Column(
             children: [
               TextField(
-                  controller: dateController, //editing controller of this TextField
+                  controller:
+                      dateController, //editing controller of this TextField
                   decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
                       labelText: "Enter Date" //label text of field
@@ -206,7 +209,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                       //String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                       //print(formattedDate); //formatted date output using intl package =>  2022-07-04
                       //You can format date as per your need
-            
+
                       setState(() {
                         dateController.text = formatDate(
                             pickedDate!); //set foratted date to TextField value.
@@ -215,6 +218,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                       debugPrint("Date is not selected");
                     } //when click we have to show the datepicker
                   }),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -234,8 +238,8 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                         dropdownValue = value!;
                       });
                     },
-                    items:
-                        dropdownList.map<DropdownMenuItem<String>>((String value) {
+                    items: dropdownList
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
@@ -244,8 +248,11 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
               for (Widget widget in inputWidgets) widget,
-              ElevatedButton(onPressed: confirmEntry, child: const Text('Confirm')),
+              SizedBox(height: 10),
+              ElevatedButton(
+                  onPressed: confirmEntry, child: const Text('Confirm')),
             ],
           ),
         ),
@@ -289,10 +296,23 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
     path = await recorderController.stop();
     playerController.preparePlayer(path: path!);
     print("playerstate: $audioPlayerState");
-    recordOrStopButton = IconButton(onPressed: playSound, icon: const Icon(Icons.play_arrow));
+    recordOrStopButton =
+        IconButton(onPressed: playSound, icon: const Icon(Icons.play_arrow));
     setState(() {
       inputWidgets.removeLast();
-      inputWidgets.add(recordOrStopButton);
+      //inputWidgets.add(recordOrStopButton);
+      inputWidgets.add(
+        AudioCard(
+          "Voice Note",
+          LocationType.local,
+          path: path,
+          onDeleted: () => setState(
+            () {
+              inputWidgets.removeLast();
+            },
+          ),
+        ),
+      );
     });
   }
 
@@ -327,7 +347,8 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
             context, "Error", "Please select a date.", confirmActions);
       } else {
         String? id = await _getId();
-        http.Response response = await postTextNoteToServer(textController.text, pickedDate.toString());
+        http.Response response = await postTextNoteToServer(
+            textController.text, pickedDate.toString());
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
@@ -339,12 +360,10 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       if (pickedDate == null) {
         showCustomDialog(
             context, "Error", "Please select a date.", confirmActions);
-      } 
-      else if (path == null) {
+      } else if (path == null) {
         showCustomDialog(
             context, "Error", "Please record a voice note", confirmActions);
-      }
-      else {
+      } else {
         await postVoiceNoteToServer(path!, pickedDate.toString());
         showCustomDialog(context, "Entry saved",
             "Your sound entry has been saved.", confirmActions);
