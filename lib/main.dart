@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:research_diary_app/home_page.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/styles.dart';
+import 'package:research_diary_app/globals.dart';
+import 'package:research_diary_app/util.dart';
 import 'package:flutter/services.dart';
 
 // TODO: Add 'Rewards'-page that shows all unlocked audio files

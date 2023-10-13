@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:research_diary_app/globals.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:device_info_plus/device_info_plus.dart';
 
 // TODO: Include audio recording capabilities
 // TODO: Include storage and loading capabilities
@@ -233,3 +235,15 @@ class _RecordingPageState extends State<RecordingPage> {
     recordingPlayer.stop();
   }
 }
+
+Future<void> getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      deviceId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      deviceId = androidDeviceInfo.id; // unique ID on Android
+    }
+  }

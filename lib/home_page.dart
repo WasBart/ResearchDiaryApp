@@ -10,6 +10,7 @@ import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/sound_example.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/styles.dart';
+import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     notificationService.init().then((value) => notificationService
         .showNotification(id: 1, title: "sample title", body: "it works"));
 
-    updateNumberOfDays();
+    getId().then((value) => updateNumberOfDays());
   }
 
   @override
