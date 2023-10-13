@@ -23,9 +23,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final NotificationService notificationService;
-  ElevatedButton researcherNotesButton =
-      ElevatedButton(style: mainButtonStyle, onPressed: () {}, child: Text("Researcher Notes"));
+  ElevatedButton researcherNotesButton = ElevatedButton(
+      style: mainButtonStyle,
+      onPressed: () {},
+      child: Text("Researcher Notes"));
   int numberOfDays = 0;
+  Widget researcherNotesContainer =
+      mainContainer(child: Text("Researcher Notes"));
 
   @override
   void initState() {
@@ -45,29 +49,31 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: mainButtonStyle,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const AddEntryPageWave();
-                  }),
-                ).then((value) => updateNumberOfDays());
-              },
-              child: const Text('Create New Entry'),
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return const AddEntryPageWave();
+                    }),
+                  ).then((value) => updateNumberOfDays());
+                },
+                child: mainContainer(child: Text("Add New Entry")),
+              ),
             ),
-            ElevatedButton(
-              style: mainButtonStyle,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return OverviewPage();
-                  }),
-                ).then((value) => updateNumberOfDays());
-              },
-              child: const Text('Overview'),
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return OverviewPage();
+                    }),
+                  ).then((value) => updateNumberOfDays());
+                },
+                child: mainContainer(child: const Text("Overview")),
+              ),
             ),
-            researcherNotesButton
+            Flexible(child: researcherNotesContainer)
           ]),
     );
   }
@@ -89,6 +95,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void updateNumberOfDays() {
+    bool buttonActive = setResearcherNotesButtonActive();
     getEnteredDays().then((value) {
       setState(() {
         researcherNotesButton = ElevatedButton(
@@ -96,6 +103,13 @@ class _HomePageState extends State<HomePage> {
                 ? researcherNotesButtonOnPressed
                 : null,
             child: Text(numberOfDays.toString()));
+        researcherNotesContainer = GestureDetector(
+            onTap: () {
+              buttonActive ? researcherNotesButtonOnPressed() : null;
+            },
+            child: buttonActive
+                ? mainContainer(child: const Text("Researcher Notes"))
+                : inactiveContainer(child: const Text("Researcher Notes")));
       });
     });
   }

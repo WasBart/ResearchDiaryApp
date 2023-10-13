@@ -1,8 +1,40 @@
 import 'package:flutter/material.dart';
 
-Color appBgColor = Color.fromARGB(255, 255, 255, 255).withOpacity(0.8);
-Color appPrimaryColor = Color(0xFFE6590E).withOpacity(0.8);
-Color appSecondaryColor = Color(0xFF662806).withOpacity(0.8);
-Color appTertiaryColor = Color(0xFFEA8954).withOpacity(0.8);
+Color appBgColor = const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8);
+Color appPrimaryColor = const Color(0xFFE6590E).withOpacity(0.8);
+Color appSecondaryColor = const Color(0xFF662806).withOpacity(0.8);
+Color appTertiaryColor = const Color(0xFFEA8954).withOpacity(0.8);
 
-ButtonStyle mainButtonStyle = ElevatedButton.styleFrom(backgroundColor: appPrimaryColor);
+ButtonStyle mainButtonStyle =
+    ElevatedButton.styleFrom(backgroundColor: appPrimaryColor);
+
+Container mainContainer({Widget? child}) {
+  return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        color: appTertiaryColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
+      child: child);
+}
+
+Container inactiveContainer({Widget? child}) {
+  return Container(alignment: Alignment.center,
+      margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 134, 133, 133),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
+      child: child);
+}

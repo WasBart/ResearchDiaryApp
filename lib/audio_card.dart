@@ -85,91 +85,82 @@ class _AudioCardState extends State<AudioCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.all(50),
-      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-      width: 200,
-      height: 150,
-      decoration: BoxDecoration(
-        color: appTertiaryColor,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(15.0),
-        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Row(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    widget.title,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.clip,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      fontSize: 14,
-                      color: Color(0xff000000),
+    return GestureDetector(
+      child: mainContainer(
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      widget.title,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.clip,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14,
+                        color: Color(0xff000000),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 130),
-                Align(alignment: Alignment.topRight,
-                child: IconButton(icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
-              ],
-            ),
-            IconButton(
-              icon: Icon(state == PlayerState.playing
-                  ? Icons.pause
-                  : Icons.play_arrow),
-              onPressed: () {
-                state == PlayerState.playing ? pauseAudio() : playAudio();
-              },
-              color: const Color(0xff212435),
-              iconSize: 24,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: Text(
-                    getTimeString(timeProgress),
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.clip,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      fontSize: 14,
-                      color: Color(0xff000000),
+                  SizedBox(width: 130),
+                  Align(alignment: Alignment.topRight,
+                  child: IconButton(icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
+                ],
+              ),
+              IconButton(
+                icon: Icon(state == PlayerState.playing
+                    ? Icons.pause
+                    : Icons.play_arrow),
+                onPressed: () {
+                  state == PlayerState.playing ? pauseAudio() : playAudio();
+                },
+                color: const Color(0xff212435),
+                iconSize: 24,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Text(
+                      getTimeString(timeProgress),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.clip,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14,
+                        color: Color(0xff000000),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(child: slider()),
-                Expanded(
-                  child: Text(
-                    getTimeString(audioDuration),
-                    textAlign: TextAlign.end,
-                    overflow: TextOverflow.clip,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      fontSize: 14,
-                      color: Color(0xff000000),
+                  Expanded(child: slider()),
+                  Expanded(
+                    child: Text(
+                      getTimeString(audioDuration),
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.clip,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14,
+                        color: Color(0xff000000),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -9,7 +9,7 @@ import 'package:research_diary_app/globals.dart';
 
 Future<http.Response> postTextNoteToServer(String text, String date) async {
   http.Response response = await http.put(
-            Uri.parse("$serverAdress/text_notes/"),
+            Uri.parse("http://$serverAdress/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID

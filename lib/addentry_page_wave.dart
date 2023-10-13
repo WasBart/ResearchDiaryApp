@@ -173,7 +173,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         ),
         body: Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
       //width: 400,
       height: 300,

@@ -113,20 +113,9 @@ class _OverviewPageState extends State<OverviewPage> {
       loadedDayList.add(ElevatedButton(onPressed: () {}, child: Text(element)));
     }*/
     entriesPerDayMap.forEach((key, value) {
-      loadedDayList.add(Container(
-        alignment: Alignment.center,
-      margin: const EdgeInsets.all(80),
-      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-      width: 200,
-      height: 150,
-      decoration: BoxDecoration(
-        color: appBgColor,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(15.0),
-        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
-      ),
-        child: ElevatedButton(
-            onPressed: () => createDayPage(value), child: Text(key), ),
+      loadedDayList.add(GestureDetector(
+        onTap: () => createDayPage(value),
+        child: mainContainer(child: Text(key))
       ));
     });
     print(datesList);
