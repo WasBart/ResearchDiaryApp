@@ -70,8 +70,12 @@ class _AudioCardState extends State<AudioCard> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
+    print("Dispose called on audio card, locationType: ${widget.locationType}, path: ${widget.path}");
+    if (widget.locationType == LocationType.local) {
+      await File(widget.path!).delete();
+    }
 
     player.dispose();
   }
@@ -216,19 +220,17 @@ class _AudioCardState extends State<AudioCard> {
       TextButton(
         child: Text("Cancel"),
         onPressed: () {
-          Navigator.of(this.context).pop();
+          Navigator.of(context).pop();
           return;
         },
       ),
       TextButton(
         child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () async {
-          Navigator.of(this.context).pop();
+          Navigator.of(context).pop();
           widget.onDeleted!();
           if (widget.locationType == LocationType.serverBased) {
             await deleteVoiceNoteFromServer(widget.dbId!);
-          } else if (widget.locationType == LocationType.local) {
-            await File(widget.path!).delete();
           }
         },
       )

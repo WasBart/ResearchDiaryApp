@@ -177,7 +177,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         body: Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           width: 400,
           height: 500,
           decoration: BoxDecoration(
@@ -346,7 +346,6 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         showCustomDialog(
             context, "Error", "Please select a date.", confirmActions);
       } else {
-        String? id = await _getId();
         http.Response response = await postTextNoteToServer(
             textController.text, pickedDate.toString());
         print("statusCode: " + response.statusCode.toString());
@@ -370,17 +369,5 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       }
     }
     //showCustomDialog(context, "Entry saved", "Your entry has been saved.", "OK");
-  }
-
-  Future<String?> _getId() async {
-    var deviceInfo = DeviceInfoPlugin();
-    if (Platform.isIOS) {
-      // import 'dart:io'
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else if (Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.id; // unique ID on Android
-    }
   }
 }
