@@ -50,19 +50,6 @@ class _RootPageState extends State<RootPage> {
             debugPrint('Floating Action Button');
           },
           child: const Icon(Icons.help_outline)),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: 'home'),
-          NavigationDestination(
-              icon: Icon(Icons.person_outlined), label: 'profile'),
-        ],
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-        selectedIndex: currentPage,
-      ),
     );
   }
 }

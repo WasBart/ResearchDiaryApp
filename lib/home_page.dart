@@ -63,8 +63,7 @@ class _HomePageState extends State<HomePage> {
                 ).then((value) => updateNumberOfDays());
               },
               child: const Text('Overview'),
-            ),
-            researcherNotesButton
+            )
           ]),
     );
   }
@@ -92,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: setResearcherNotesButtonActive()
                 ? researcherNotesButtonOnPressed
                 : null,
-            child: Text(numberOfDays.toString()));
+            child: const Text("Researcher Notes"));
       });
     });
   }

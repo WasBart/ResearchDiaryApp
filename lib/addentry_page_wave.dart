@@ -161,9 +161,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFDF7664),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         title: const Text('Add New Entry'),
       ),
       body: Column(
