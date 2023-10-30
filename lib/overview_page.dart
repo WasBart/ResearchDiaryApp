@@ -38,7 +38,6 @@ class _OverviewPageState extends State<OverviewPage> {
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
-        //print(entriesPerDayMap);
       });
     });
   }
@@ -80,17 +79,6 @@ class _OverviewPageState extends State<OverviewPage> {
   }
 
   Future createDaysList() async {
-    /*for (int i = 0; i < 50; i++) {
-      dayList.add(
-        ElevatedButton(
-          onPressed: () {},
-          child: Text("Test$i"),
-        ),
-      );
-    }
-    */
-
-    // TODO: Call backend and get all entries for days and create buttons in dayList for each day
     List entriesList = await getTextNotesFromServer();
     List temp = await getVoiceNotesFromServer();
     entriesList.addAll(temp);
@@ -109,18 +97,15 @@ class _OverviewPageState extends State<OverviewPage> {
         entriesPerDayMap[entryDate]?.add(element);
       }
     }
-    /*for (var element in datesList) {
-      loadedDayList.add(ElevatedButton(onPressed: () {}, child: Text(element)));
-    }*/
+    var sortedByValueMap = Map.fromEntries(
+    entriesPerDayMap.entries.toList()..sort((e2, e1) => e1.value[0]['date'].compareTo(e2.value[0]['date'])));
+    entriesPerDayMap = sortedByValueMap;
     entriesPerDayMap.forEach((key, value) {
       loadedDayList.add(GestureDetector(
         onTap: () => createDayPage(value),
         child: mainContainer(child: Text(key))
       ));
     });
-    print(datesList);
-    // TODO: get dates for elements and if they do not exist in daysList, add them to days list
-    // TODO: create buttons for each day that link to day pages for the days
   }
 
   void createDayPage(List<Map> entriesPerDay) {
@@ -131,7 +116,6 @@ class _OverviewPageState extends State<OverviewPage> {
     ).then((value) => createDaysList().then((value) {
           setState(() {
             dayList = loadedDayList;
-            //print("entries per day map: $entriesPerDayMap");
           });
         }));
   }
