@@ -108,6 +108,9 @@ class _OverviewPageState extends State<OverviewPage> {
     /*for (var element in datesList) {
       loadedDayList.add(ElevatedButton(onPressed: () {}, child: Text(element)));
     }*/
+    var sortedByValueMap = Map.fromEntries(
+    entriesPerDayMap.entries.toList()..sort((e2, e1) => e1.value[0]['date'].compareTo(e2.value[0]['date'])));
+    entriesPerDayMap = sortedByValueMap;
     entriesPerDayMap.forEach((key, value) {
       loadedDayList.add(ElevatedButton(
           onPressed: () => createDayPage(value), child: Text(key)));

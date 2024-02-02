@@ -9,7 +9,7 @@ import 'package:research_diary_app/globals.dart';
 
 Future<http.Response> postTextNoteToServer(String text, String date) async {
   http.Response response = await http.put(
-            Uri.parse("http://$serverAdress/text_notes/"),
+            Uri.parse("https://$serverAdress/text_notes/"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'x-token': '123' // TODO: change to actual ID
@@ -25,7 +25,7 @@ Future<http.Response> postTextNoteToServer(String text, String date) async {
 
 Future<List> getTextNotesFromServer() async {
   http.Response response = await http.get(
-        Uri.parse("http://$serverAdress/text_notes/"),
+        Uri.parse("https://$serverAdress/text_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -37,7 +37,7 @@ Future<List> getTextNotesFromServer() async {
 }
 
 Future<void> deleteTextNoteFromServer(int textNoteId) async {
-   http.Response response = await http.delete(Uri.parse("http://$serverAdress/text_notes/$textNoteId"), headers: <String, String>{
+   http.Response response = await http.delete(Uri.parse("https://$serverAdress/text_notes/$textNoteId"), headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
         print("statusCode: "  + response.statusCode.toString());
@@ -45,7 +45,7 @@ Future<void> deleteTextNoteFromServer(int textNoteId) async {
 }
 
 Future<void> postVoiceNoteToServer(String path, String date) async {
-  var uri = Uri.http('$serverAdress', '/new_voice_notes/');
+  var uri = Uri.https('$serverAdress', '/new_voice_notes/');
     //Uri.parse('http://10.0.2.2:')
     var request = http.MultipartRequest('POST', uri)
       ..headers['x-token'] = "123" // TODO change to actual id
@@ -60,7 +60,7 @@ Future<void> postVoiceNoteToServer(String path, String date) async {
 }
 
 Future<List> getVoiceNotesFromServer() async {
-   http.Response response = await http.get(Uri.parse("http://$serverAdress/voice_notes/"),
+   http.Response response = await http.get(Uri.parse("https://$serverAdress/voice_notes/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
@@ -70,7 +70,7 @@ Future<List> getVoiceNotesFromServer() async {
 
 Future<Uint8List> getVoiceNoteFromServer(int voiceNoteId) async {
   http.Response response = await http.get(
-        Uri.parse("http://$serverAdress/voice_note/$voiceNoteId/"),
+        Uri.parse("https://$serverAdress/voice_note/$voiceNoteId/"),
         headers: <String, String>{
           'x-token': '123' // TODO: change to actual id
         });
