@@ -5,8 +5,6 @@ import 'dart:convert';
 
 import 'package:research_diary_app/globals.dart';
 
-// TODO: figure out where to call getId and set the new id for all functions of this module
-
 Future<http.Response> postTextNoteToServer(String text, String date) async {
   http.Response response = await http.put(
             Uri.parse("https://$serverAdress/text_notes/"),

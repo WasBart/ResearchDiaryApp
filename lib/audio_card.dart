@@ -108,7 +108,7 @@ class _AudioCardState extends State<AudioCard> {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       fontSize: 14,
                       color: Color(0xff000000),
@@ -143,7 +143,7 @@ class _AudioCardState extends State<AudioCard> {
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       fontSize: 14,
                       color: Color(0xff000000),
@@ -157,7 +157,7 @@ class _AudioCardState extends State<AudioCard> {
                     textAlign: TextAlign.end,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       fontSize: 14,
                       color: Color(0xff000000),

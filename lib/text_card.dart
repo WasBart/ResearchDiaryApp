@@ -27,6 +27,7 @@ class _TextCardState extends State<TextCard> {
               fit: FlexFit.loose,
               child: TextField(
                   keyboardType: TextInputType.multiline,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                   maxLines: null,
                   enabled: false,
                   controller: TextEditingController(text: widget.text)),

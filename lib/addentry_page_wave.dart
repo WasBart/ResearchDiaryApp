@@ -35,12 +35,14 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
   int currentPage = 0;
   var dateController = TextEditingController();
   var textController = TextEditingController();
+  var titleController = TextEditingController();
   var dropdownValue = dropdownList.first;
   List<Widget> inputWidgets = [];
   bool isRecorderReady = false;
   String? textOrAudio = "Text";
   DateTime? pickedDate;
   String? inputText;
+  TextField titleTextField = TextField();
   TextField thoughtsTextField = TextField();
   late IconButton recordOrStopButton;
 
@@ -65,9 +67,15 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
   void initState() {
     super.initState();
     thoughtsTextField = TextField(
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        maxLines: 3,
         decoration: InputDecoration(
-            border: OutlineInputBorder(), hintText: 'Enter your thoughts'),
+            border: OutlineInputBorder(), hintText: 'Enter your thoughts', hintStyle: TextStyle(fontWeight: FontWeight.bold)),
         controller: textController);
+    titleTextField = TextField(decoration: InputDecoration(
+            border: OutlineInputBorder(), hintText: 'Title', hintStyle: TextStyle(fontWeight: FontWeight.bold)),
+        controller: titleController);
     inputWidgets.add(thoughtsTextField);
 
     _initialiseController();
@@ -177,7 +185,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         body: Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
           width: 400,
           height: 500,
           decoration: BoxDecoration(
@@ -188,12 +196,13 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
           ),
           child: Column(
             children: [
+              titleTextField,
               TextField(
                   controller:
                       dateController, //editing controller of this TextField
                   decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
-                      labelText: "Enter Date" //label text of field
+                      labelText: "Enter Date", labelStyle: TextStyle(fontWeight: FontWeight.bold) //label text of field
                       ),
                   readOnly: true, // when true user cannot edit text
                   onTap: () async {
@@ -220,9 +229,10 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                   }),
               SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text('Type:'),
+                  const SizedBox(width: 10),
                   DropdownButton<String>(
                     value: dropdownValue,
                     icon: const Icon(Icons.arrow_downward),
@@ -242,7 +252,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
                       );
                     }).toList(),
                   ),
@@ -252,7 +262,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
               for (Widget widget in inputWidgets) widget,
               SizedBox(height: 10),
               ElevatedButton(
-                  onPressed: confirmEntry, child: const Text('Confirm')),
+                  onPressed: confirmEntry, child: const Text('Confirm', style: TextStyle(fontWeight: FontWeight.bold))),
             ],
           ),
         ),

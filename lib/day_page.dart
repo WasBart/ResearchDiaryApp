@@ -150,7 +150,7 @@ class _DayPageState extends State<DayPage> {
         voiceNoteIndex++;
       } else {
         TextField tf = TextField(
-            enabled: false,
+            enabled: true,
             controller: TextEditingController(
                 text: widget.assignedEntriesList[i]["text"]));
         createdEntries.add(tf);

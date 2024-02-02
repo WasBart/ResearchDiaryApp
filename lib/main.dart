@@ -21,7 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: createMaterialColor(appPrimaryColor)),
+      theme: ThemeData(
+          primarySwatch: createMaterialColor(appPrimaryColor),
+          textTheme: TextTheme().copyWith(
+              bodyMedium: TextStyle(fontWeight: FontWeight.bold))),
       home: const RootPage(),
     );
   }
