@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 Color appBgColor = const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8);
 Color appPrimaryColor = const Color(0xFFE6590E).withOpacity(0.8);
@@ -13,8 +14,8 @@ Container mainContainer({Widget? child}) {
       alignment: Alignment.center,
       margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
       padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-      width: 200,
       height: 150,
+      width: 200,
       decoration: BoxDecoration(
         color: appTertiaryColor,
         shape: BoxShape.rectangle,

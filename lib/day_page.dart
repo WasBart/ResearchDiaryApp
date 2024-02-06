@@ -102,14 +102,14 @@ class _DayPageState extends State<DayPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-                child: ListView.separated(
+                child: ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: entryCards.length,
               itemBuilder: (BuildContext context, int index) {
                 return entryCards[index];
               },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+              //separatorBuilder: (BuildContext context, int index) =>
+              //    const Divider(),
             ))
           ]),
       floatingActionButton: FloatingActionButton(

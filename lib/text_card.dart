@@ -19,21 +19,44 @@ class TextCard extends StatefulWidget {
 class _TextCardState extends State<TextCard> {
   @override
   Widget build(BuildContext context) {
-    return mainContainer(
-      child: Row(
-          mainAxisSize: MainAxisSize.min,
+    return IntrinsicHeight(
+      child: Container(
+        alignment: Alignment.center,
+      margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+      padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+      width: 200,
+      decoration: BoxDecoration(
+        color: appTertiaryColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: TextField(
-                  keyboardType: TextInputType.multiline,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  maxLines: null,
-                  enabled: false,
-                  controller: TextEditingController(text: widget.text)),
-            ),
-          Flexible(child: IconButton(onPressed: deleteTextNote, icon: const Icon(Icons.delete)))
-        ],
+          Text(
+            "Test Title",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                fit: FlexFit.loose,
+                child: TextField(
+                    keyboardType: TextInputType.multiline,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: null,
+                    enabled: false,
+                    controller: TextEditingController(text: widget.text),
+                    decoration: InputDecoration(border: InputBorder.none)),
+              ),
+              Flexible(
+                  child: IconButton(
+                      onPressed: deleteTextNote, icon: const Icon(Icons.delete)))
+            ],
+          ),
+        ]),
       ),
     );
   }
@@ -48,7 +71,8 @@ class _TextCardState extends State<TextCard> {
         },
       ),
       TextButton(
-        child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
+        child: const Text("Confirm",
+            style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () async {
           Navigator.of(this.context).pop();
           widget.onDeleted!();
