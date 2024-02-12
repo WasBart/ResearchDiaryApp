@@ -345,7 +345,6 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       )
     ];
     if (textOrAudio == 'Text') {
-      //http.post()
       if (pickedDate == null && textController.text == "") {
         showCustomDialog(context, "Error",
             "Please select a date and enter some text.", confirmActions);
@@ -355,9 +354,13 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       } else if (pickedDate == null) {
         showCustomDialog(
             context, "Error", "Please select a date.", confirmActions);
-      } else {
+      } 
+      else if (titleController.text == "") {
+        showCustomDialog(context, "Error", "Please give your entry a title.", confirmActions);
+      }
+      else {
         http.Response response = await postTextNoteToServer(
-            textController.text, pickedDate.toString());
+            textController.text, titleController.text, pickedDate.toString());
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
@@ -369,11 +372,15 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
       if (pickedDate == null) {
         showCustomDialog(
             context, "Error", "Please select a date.", confirmActions);
-      } else if (path == null) {
+      }
+      else if (titleController.text == "") {
+        showCustomDialog(context, "Error", "Please give your entry a title.", confirmActions);
+      } 
+      else if (path == null) {
         showCustomDialog(
             context, "Error", "Please record a voice note", confirmActions);
       } else {
-        await postVoiceNoteToServer(path!, pickedDate.toString());
+        await postVoiceNoteToServer(path!, titleController.text, pickedDate.toString());
         showCustomDialog(context, "Entry saved",
             "Your sound entry has been saved.", confirmActions);
       }

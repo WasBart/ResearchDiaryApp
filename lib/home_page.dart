@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool setResearcherNotesButtonActive() {
-    if (numberOfDays > 0) {
+    if (numberOfDays >= 3) {
       return true;
     } else {
       return false;
@@ -106,27 +106,35 @@ class _HomePageState extends State<HomePage> {
             child: Text(numberOfDays.toString()));
         researcherNotesContainer = GestureDetector(
             onTap: () {
-              buttonActive ? researcherNotesButtonOnPressed() : null;
+              buttonActive ? researcherNotesButtonOnPressed() : showCustomDialog(
+                  context,
+                  "Research Area",
+                  "Check back after you have added more days to your research diary to find research and additional info pertaining to men's studies here.",
+                  List.empty());
             },
             child: buttonActive
-                ? mainContainer(child: const Text("Researcher Notes"))
-                : inactiveContainer(child: const Text("Researcher Notes")));
+                ? mainContainer(child: const Text("Research Area"))
+                : inactiveContainer(child: const Text("Research Area")));
       });
     });
   }
 
   Future getEnteredDays() async {
-    List entriesList = await getTextNotesFromServer();
+    List textEntriesList = await getTextNotesFromServer();
+    List audioEntriesList = await getVoiceNotesFromServer();
+    textEntriesList.addAll(audioEntriesList);
     List datesList = [];
-    for (var element in entriesList) {
+    for (var element in textEntriesList) {
       String entryDate = element["date"];
       entryDate = entryDate.substring(0, entryDate.indexOf("T"));
       if (!datesList.contains(entryDate)) {
         datesList.add(entryDate);
+        print("Entry date just added: $entryDate");
       }
     }
     setState(() {
       numberOfDays = datesList.length;
+      print("Number of days: $numberOfDays");
     });
   }
 }

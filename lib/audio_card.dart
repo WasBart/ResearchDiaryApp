@@ -64,7 +64,6 @@ class _AudioCardState extends State<AudioCard> {
     player.onPositionChanged.listen((Duration duration) async {
       setState(() {
         timeProgress = duration.inMilliseconds;
-        print("NewDuration: $duration");
       });
     });
   }

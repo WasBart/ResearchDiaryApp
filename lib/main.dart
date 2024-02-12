@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: createMaterialColor(appPrimaryColor),
-          textTheme: TextTheme().copyWith(
-              bodyMedium: TextStyle(fontWeight: FontWeight.bold))),
+          textTheme: TextTheme()
+              .copyWith(bodyMedium: TextStyle(fontWeight: FontWeight.bold))),
       home: const RootPage(),
     );
   }
@@ -64,6 +64,11 @@ class _RootPageState extends State<RootPage> {
             backgroundColor: appPrimaryColor,
             onPressed: () {
               debugPrint('Floating Action Button');
+              showCustomDialog(
+                  context,
+                  "Info",
+                  "Created by Wassily Bartuska for a master's thesis researching young men, social media and mental health at TU Wien. If you need support or run into any bugs or errors feel free to contact me at: \n wassily.bartuska@student.tuwien.ac.at.",
+                  List.empty());
             },
             child: const Icon(Icons.help_outline)),
       ),

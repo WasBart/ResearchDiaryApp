@@ -143,7 +143,7 @@ class _DayPageState extends State<DayPage> {
         int currentId = widget.assignedEntriesList[i]["id"];
 
         entryCards.add(AudioCard(
-            "Voice Note $voiceNoteIndex", LocationType.serverBased,
+            widget.assignedEntriesList[i]["title"], LocationType.serverBased,
             dbId: currentId, onDeleted: () => {
               deleteCardFromList(i)
             },));
@@ -162,7 +162,7 @@ class _DayPageState extends State<DayPage> {
             child: const Icon(Icons.delete));
         createdEntries.add(dButton);
 
-        entryCards.add(TextCard(widget.assignedEntriesList[i]["text"], widget.assignedEntriesList[i]["id"], onDeleted: () => {
+        entryCards.add(TextCard(widget.assignedEntriesList[i]["text"], widget.assignedEntriesList[i]["title"], widget.assignedEntriesList[i]["id"], onDeleted: () => {
           deleteCardFromList(i)
         }));
       }

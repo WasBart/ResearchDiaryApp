@@ -6,6 +6,7 @@ import 'package:research_diary_app/styles.dart';
 
 class TextCard extends StatefulWidget {
   String text;
+  String title;
   int dbId;
 
   final VoidCallback? onDeleted;
@@ -13,7 +14,7 @@ class TextCard extends StatefulWidget {
   @override
   _TextCardState createState() => _TextCardState();
 
-  TextCard(this.text, this.dbId, {this.onDeleted});
+  TextCard(this.text, this.title, this.dbId, {this.onDeleted});
 }
 
 class _TextCardState extends State<TextCard> {
@@ -35,7 +36,7 @@ class _TextCardState extends State<TextCard> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
           Text(
-            "Test Title",
+            widget.title,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
