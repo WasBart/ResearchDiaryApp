@@ -71,7 +71,8 @@ class _AudioCardState extends State<AudioCard> {
   @override
   void dispose() async {
     super.dispose();
-    print("Dispose called on audio card, locationType: ${widget.locationType}, path: ${widget.path}");
+    print(
+        "Dispose called on audio card, locationType: ${widget.locationType}, path: ${widget.path}");
     if (widget.locationType == LocationType.local) {
       await File(widget.path!).delete();
     }

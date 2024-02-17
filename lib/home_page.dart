@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     notificationService.init().then((value) => notificationService
         .showNotification(id: 1, title: "sample title", body: "it works"));
 
-    getId().then((value) => updateNumberOfDays());
+    getId().then((value) => getEnteredDays());
   }
 
   @override
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (BuildContext context) {
                       return const AddEntryPageWave();
                     }),
-                  ).then((value) => updateNumberOfDays());
+                  ).then((value) => getEnteredDays());
                 },
                 child: mainContainer(child: Text("Add New Entry")),
               ),
@@ -69,23 +69,32 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (BuildContext context) {
                       return OverviewPage();
                     }),
-                  ).then((value) => updateNumberOfDays());
+                  ).then((value) => getEnteredDays());
                 },
                 child: mainContainer(child: const Text("Overview")),
               ),
             ),
-            Flexible(child: researcherNotesContainer)
+            Flexible(child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return RewardsPage(numberOfDays: numberOfDays);
+                    }),
+                  ).then((value) => getEnteredDays());
+                },
+                child: mainContainer(child: const Text("Research Area")),
+              ),)
           ]),
     );
   }
 
-  void researcherNotesButtonOnPressed() {
+  /*void researcherNotesButtonOnPressed() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (BuildContext context) {
         return RewardsPage();
       }),
     );
-  }
+  }*/
 
   bool setResearcherNotesButtonActive() {
     if (numberOfDays >= 3) {
@@ -95,7 +104,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void updateNumberOfDays() {
+  /*void updateNumberOfDays() {
     bool buttonActive = setResearcherNotesButtonActive();
     getEnteredDays().then((value) {
       setState(() {
@@ -117,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 : inactiveContainer(child: const Text("Research Area")));
       });
     });
-  }
+  }*/
 
   Future getEnteredDays() async {
     List textEntriesList = await getTextNotesFromServer();

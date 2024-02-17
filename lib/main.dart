@@ -67,7 +67,7 @@ class _RootPageState extends State<RootPage> {
               showCustomDialog(
                   context,
                   "Info",
-                  "Created by Wassily Bartuska for a master's thesis researching young men, social media and mental health at TU Wien. If you need support or run into any bugs or errors feel free to contact me at: \n wassily.bartuska@student.tuwien.ac.at.",
+                  "Created by Wassily Bartuska for a master's thesis researching young men, social media and mental health at TU Wien. If you need support or run into any bugs or errors feel free to contact me at: \n wassily.bartuska@student.tuwien.ac.at. \n Device ID: $deviceId",
                   List.empty());
             },
             child: const Icon(Icons.help_outline)),
