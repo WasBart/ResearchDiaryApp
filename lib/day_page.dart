@@ -112,11 +112,7 @@ class _DayPageState extends State<DayPage> {
               //    const Divider(),
             ))
           ]),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            debugPrint('Floating Action Button');
-          },
-          child: const Icon(Icons.help_outline)),
+      floatingActionButton: helpButton(context: context)
     );
   }
 
