@@ -9,6 +9,8 @@ import 'package:path/path.dart' as path;
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:research_diary_app/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // TODO: Include audio recording capabilities
 // TODO: Include storage and loading capabilities
@@ -246,4 +248,18 @@ Future<void> getId() async {
       var androidDeviceInfo = await deviceInfo.androidInfo;
       deviceId = androidDeviceInfo.id; // unique ID on Android
     }
+  }
+
+  FloatingActionButton helpButton({required BuildContext context}) {
+    return FloatingActionButton(
+            backgroundColor: appPrimaryColor,
+            onPressed: () {
+              debugPrint('Floating Action Button');
+              showCustomDialog(
+                  context,
+                  "Info",
+                  AppLocalizations.of(context)!.helpText(deviceId!),
+                  List.empty());
+            },
+            child: const Icon(Icons.help_outline));
   }

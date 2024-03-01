@@ -9,6 +9,7 @@ import 'package:research_diary_app/globals.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // TODO: Make a scrollable view that loads clickable entries for days
 // days are determined by what entries per day exist for users
@@ -56,7 +57,7 @@ class _OverviewPageState extends State<OverviewPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Overview'),
+        title: Text(AppLocalizations.of(context)!.overviewPageTitle),
       ),
       body: Center(
         child: Column(
@@ -70,11 +71,7 @@ class _OverviewPageState extends State<OverviewPage> {
               )
             ]),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            debugPrint('Floating Action Button');
-          },
-          child: const Icon(Icons.help_outline)),
+      floatingActionButton: helpButton(context: context),
     );
   }
 

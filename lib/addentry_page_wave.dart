@@ -18,6 +18,7 @@ import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/audio_card.dart';
 //import 'package:audioplayers/audio_cache.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // TODO: add researcher voice notes as assets in pubspec file
 // TODO: delete local voice note file when uploaded or cancelled
@@ -66,17 +67,19 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
   @override
   void initState() {
     super.initState();
-    thoughtsTextField = TextField(
+    Future.delayed(Duration.zero, () {
+      setState(() { thoughtsTextField = TextField(
         keyboardType: TextInputType.multiline,
         minLines: 1,
         maxLines: 3,
         decoration: InputDecoration(
-            border: OutlineInputBorder(), hintText: 'Enter your thoughts', hintStyle: TextStyle(fontWeight: FontWeight.bold)),
+            border: OutlineInputBorder(), hintText: AppLocalizations.of(context)!.textFieldText, hintStyle: TextStyle(fontWeight: FontWeight.bold)),
         controller: textController);
     titleTextField = TextField(decoration: InputDecoration(
-            border: OutlineInputBorder(), hintText: 'Title', hintStyle: TextStyle(fontWeight: FontWeight.bold)),
+            border: OutlineInputBorder(), hintText: AppLocalizations.of(context)!.addTitleText, hintStyle: TextStyle(fontWeight: FontWeight.bold)),
         controller: titleController);
-    inputWidgets.add(thoughtsTextField);
+    inputWidgets.add(thoughtsTextField);});
+    });
 
     _initialiseController();
 
@@ -180,7 +183,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          title: const Text('Add New Entry'),
+          title: Text(AppLocalizations.of(context)!.addEntryPageTitle),
         ),
         body: Container(
           alignment: Alignment.center,
@@ -200,9 +203,9 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
               TextField(
                   controller:
                       dateController, //editing controller of this TextField
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
-                      labelText: "Enter Date", labelStyle: TextStyle(fontWeight: FontWeight.bold) //label text of field
+                      labelText: AppLocalizations.of(context)!.datePickerText, labelStyle: TextStyle(fontWeight: FontWeight.bold) //label text of field
                       ),
                   readOnly: true, // when true user cannot edit text
                   onTap: () async {
@@ -231,7 +234,7 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text('Type:'),
+                  Text(AppLocalizations.of(context)!.typeHeaderText),
                   const SizedBox(width: 10),
                   DropdownButton<String>(
                     value: dropdownValue,
@@ -262,16 +265,11 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
               for (Widget widget in inputWidgets) widget,
               SizedBox(height: 10),
               ElevatedButton(
-                  onPressed: confirmEntry, child: const Text('Confirm', style: TextStyle(fontWeight: FontWeight.bold))),
+                  onPressed: confirmEntry, child: Text(AppLocalizations.of(context)!.confirmButtonText, style: TextStyle(fontWeight: FontWeight.bold))),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            debugPrint('Floating Action Button');
-          },
-          child: const Icon(Icons.help_outline),
-        ),
+        floatingActionButton: helpButton(context: context),
       ),
     );
   }
@@ -347,16 +345,16 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
     if (textOrAudio == 'Text') {
       if (pickedDate == null && textController.text == "") {
         showCustomDialog(context, "Error",
-            "Please select a date and enter some text.", confirmActions);
+            AppLocalizations.of(context)!.dateAndTextMissingText, confirmActions);
       } else if (textController.text == "") {
         showCustomDialog(
-            context, "Error", "Please enter some text.", confirmActions);
+            context, "Error", AppLocalizations.of(context)!.textMissingText, confirmActions);
       } else if (pickedDate == null) {
         showCustomDialog(
-            context, "Error", "Please select a date.", confirmActions);
+            context, "Error", AppLocalizations.of(context)!.dateMissingText, confirmActions);
       } 
       else if (titleController.text == "") {
-        showCustomDialog(context, "Error", "Please give your entry a title.", confirmActions);
+        showCustomDialog(context, "Error", AppLocalizations.of(context)!.titleMissingText, confirmActions);
       }
       else {
         http.Response response = await postTextNoteToServer(
@@ -364,25 +362,25 @@ class _AddEntryPageWaveState extends State<AddEntryPageWave> {
         print("statusCode: " + response.statusCode.toString());
         // TODO: status code überprüfen ob 200 sonst error message und error handling
         print("Body: " + response.body);
-        showCustomDialog(context, "Entry saved", "Your entry has been saved.",
+        showCustomDialog(context, AppLocalizations.of(context)!.entrySavedTitleText, AppLocalizations.of(context)!.entrySavedText,
             confirmActions);
       }
     } else if (textOrAudio == 'Audio') {
       // TODO: delete local audio file
       if (pickedDate == null) {
         showCustomDialog(
-            context, "Error", "Please select a date.", confirmActions);
+            context, "Error", AppLocalizations.of(context)!.dateMissingText, confirmActions);
       }
       else if (titleController.text == "") {
-        showCustomDialog(context, "Error", "Please give your entry a title.", confirmActions);
+        showCustomDialog(context, "Error", AppLocalizations.of(context)!.titleMissingText, confirmActions);
       } 
       else if (path == null) {
         showCustomDialog(
-            context, "Error", "Please record a voice note", confirmActions);
+            context, "Error", AppLocalizations.of(context)!.voiceNoteMissingText, confirmActions);
       } else {
         await postVoiceNoteToServer(path!, titleController.text, pickedDate.toString());
-        showCustomDialog(context, "Entry saved",
-            "Your sound entry has been saved.", confirmActions);
+        showCustomDialog(context, AppLocalizations.of(context)!.entrySavedTitleText,
+            AppLocalizations.of(context)!.entrySavedText, confirmActions);
       }
     }
     //showCustomDialog(context, "Entry saved", "Your entry has been saved.", "OK");

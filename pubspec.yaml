@@ -40,7 +40,6 @@ dependencies:
   permission_handler: ^8.1.2
   path: ^1.8.0
   assets_audio_player: ^3.0.3+3
-  intl: ^0.17.0
   device_info_plus: ^9.0.2
   flutter_local_notifications: ^9.7.0
   timezone: ^0.8.0
@@ -51,6 +50,9 @@ dependencies:
   audio_waveforms: ^1.0.4
   audioplayers: ^5.1.0
   file_picker: ^5.5.0
+  intl: any
+  flutter_localizations:
+    sdk: flutter
   
 
 dev_dependencies:
@@ -69,6 +71,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

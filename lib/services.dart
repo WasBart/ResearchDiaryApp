@@ -26,9 +26,7 @@ Future<List> getTextNotesFromServer() async {
       headers: <String, String>{'x-token': deviceId!});
   //print("statusCode: "  + response.statusCode.toString());
   // TODO: status code überprüfen ob 200 sonst error message und error handling
-
-  var convResp = response.body;
-  return json.decode(convResp);
+  return json.decode(utf8.decode(response.bodyBytes));
 }
 
 Future<void> deleteTextNoteFromServer(int textNoteId) async {
@@ -59,8 +57,7 @@ Future<List> getVoiceNotesFromServer() async {
   http.Response response = await http.get(
       Uri.parse("https://$serverAdress/voice_notes/"),
       headers: <String, String>{'x-token': deviceId!});
-  var convResp = response.body;
-  return json.decode(convResp);
+  return json.decode(utf8.decode(response.bodyBytes));
 }
 
 Future<Uint8List> getVoiceNoteFromServer(int voiceNoteId) async {

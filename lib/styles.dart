@@ -26,7 +26,8 @@ Container mainContainer({Widget? child}) {
 }
 
 Container inactiveContainer({Widget? child}) {
-  return Container(alignment: Alignment.center,
+  return Container(
+      alignment: Alignment.center,
       margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
       padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
       width: 200,
@@ -38,4 +39,19 @@ Container inactiveContainer({Widget? child}) {
         border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
       ),
       child: child);
+}
+
+Container variableContainer({Widget? child}) {
+  return Container(
+    alignment: Alignment.center,
+    margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+    padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+    width: 200,
+    decoration: BoxDecoration(
+      color: appTertiaryColor,
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(15.0),
+      border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+    ),
+  );
 }

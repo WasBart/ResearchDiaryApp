@@ -14,6 +14,7 @@ import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: Text("Add New Entry")),
+                child: mainContainer(child: Text(AppLocalizations.of(context)!.addButtonText)),
               ),
             ),
             Flexible(
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: const Text("Overview")),
+                child: mainContainer(child: Text(AppLocalizations.of(context)!.overviewButtonText)),
               ),
             ),
             Flexible(child: GestureDetector(
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: const Text("Research Area")),
+                child: mainContainer(child: Text(AppLocalizations.of(context)!.researchButtonText)),
               ),)
           ]),
     );

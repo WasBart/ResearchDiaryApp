@@ -5,6 +5,8 @@ import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // TODO: Add 'Rewards'-page that shows all unlocked audio files
 
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: createMaterialColor(appPrimaryColor),
           textTheme: TextTheme()
               .copyWith(bodyMedium: TextStyle(fontWeight: FontWeight.bold))),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const RootPage(),
     );
   }
@@ -60,17 +64,7 @@ class _RootPageState extends State<RootPage> {
           title: const Text('Research Diary'),
         ),
         body: const HomePage(),
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: appPrimaryColor,
-            onPressed: () {
-              debugPrint('Floating Action Button');
-              showCustomDialog(
-                  context,
-                  "Info",
-                  "Created by Wassily Bartuska for a master's thesis researching young men, social media and mental health at TU Wien. If you need support or run into any bugs or errors feel free to contact me at: \n wassily.bartuska@student.tuwien.ac.at. \n Device ID: $deviceId",
-                  List.empty());
-            },
-            child: const Icon(Icons.help_outline)),
+        floatingActionButton: helpButton(context: context)
       ),
     );
   }
