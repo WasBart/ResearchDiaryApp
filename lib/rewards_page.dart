@@ -53,20 +53,23 @@ class _RewardsPageState extends State<RewardsPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Overview'),
+        title: const Text('Research Area'),
       ),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ListView(
-                  children: getVoiceNotesList(),
-                ),
-              )
-            ]),
-      ),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+                child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: getVoiceNotesList().length,
+              itemBuilder: (BuildContext context, int index) {
+                return getVoiceNotesList()[index];
+              },
+              //separatorBuilder: (BuildContext context, int index) =>
+              //    const Divider(),
+            ))
+          ]),
       floatingActionButton: helpButton(context: context),
     );
   }
@@ -75,29 +78,44 @@ class _RewardsPageState extends State<RewardsPage> {
     List<Widget> tempList = [];
     if (widget.numberOfDays < 1) {
       tempList = [
-        inactiveContainer(
-            child: Text(AppLocalizations.of(context)!.emptyResearchArea))
+        IntrinsicHeight(
+          child: inactiveContainer(
+            child: Text(AppLocalizations.of(context)!.emptyResearchArea),
+          ),
+        ),
       ];
     } else if (widget.numberOfDays < 3) {
       tempList = [
-        TextCard(
-            AppLocalizations.of(context)!.researchText1, "Research Note 1", -1)
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText1)),
+        ),
       ];
-    } else if (widget.numberOfDays < 7) {
+    } else if (widget.numberOfDays < 6) {
       tempList = [
-        TextCard(
-            AppLocalizations.of(context)!.researchText1, "Research Note 1", -1),
-        TextCard(
-            AppLocalizations.of(context)!.researchText2, "Research Note 2", -2)
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText1)),
+        ),
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText2)),
+        )
       ];
     } else {
       tempList = [
-        TextCard(
-            AppLocalizations.of(context)!.researchText1, "Research Note 1", -1),
-        TextCard(
-            AppLocalizations.of(context)!.researchText2, "Research Note 2", -2),
-        TextCard(
-            AppLocalizations.of(context)!.researchText3, "Research Note 3", -3)
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText1)),
+        ),
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText2)),
+        ),
+        IntrinsicHeight(
+          child: variableContainer(
+              child: Text(AppLocalizations.of(context)!.researchText3)),
+        )
       ];
     }
     return tempList;

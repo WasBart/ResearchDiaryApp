@@ -42,13 +42,30 @@
 
   "overviewPageTitle": "Übersicht",
   "@overviewPageTitle": {},
+  "noEntriesText": "Keine Einträge vorhanden.",
+  "@noEntriesText": {},
 
-  "emptyResearchArea": "Komme zurück auf diese Seite, wenn du mehr Tage in deinem Research Diary eingetragen hast.",
+  "emptyResearchArea": "Komme auf diese Seite zurück, wenn du mehr Tage in deinem Research Diary eingetragen hast.",
   "@emptyResearchArea": {},
   "researchText1": "In her book titled \"Masculinites\", Australian Sociologist R.W. Connell details her findings on men competing for masculine status at school. These young men used socially accepted sports to make a name for themselves. If they could not perform well in these sports, they had to turn to other socially accepted activities such as working on the school newspaper. In contact sports aggression is encouraged. If they showed too much aggression however, they got shunned by their peers, especially when this physicality, albeit permitted by the rules of the sports, leads to injuries to teammates or opponents. Her theories show the pressure of defining your own masculinity, which may give us a chance to reflect on frustration created by these, not always apparent, personal struggles. \n R. Connell. Masculinities. University of California Press, 1995",
   "@researchText1": {},
   "researchText2" : "In his podcast Behind the Bastards, Robert Evans reveals that the notion of the alpha wolf is based on a misconception. The creator of the alpha wolf theory examined wolves in captivity at a zoo, which does not apply to ones living in the wild. The idea propagated especially by some male online influencers that men can be classified into alpha, beta or sigma individuals, has no apparent scientific background. There is neither a direct link between human social behavior and that of canines in captivity nor of wild specimens. \n Behind the Bastards. Part one: The birth of the manosphere. https: //www.iheart.com/podcast/105-behind-the-bastards-29236323/episode/part-one-the-birth-of-the-78006084/. Accessed: 2024-01-01. R. Schenkel. Expression studies on wolves: Captivity observations.",
   "@researchText2": {},
   "researchText3": "After extensive therapy practice and observations therapist and researcher Kate Dvorkin believes that therapy should be designed to play off of men's strengths and weaknesses. Rather than focusing on emotion-based conversational sessions, individual men's strengths in their lives should be the focus of therapy techniques. She recommends therapists focus closely on their male patients' problems and work towards concrete solutions. Cognitive behavioral therapy is one of the forms of therapy she prefers when treating men. Her findings show that not every type of therapy is perfectly suited for every type of patient, which means that finding a productive mode of therapy often includes trying different therapists and different therapy techniques. However, her and her peer’s focus on finding the best treatments for men can leave us optimistic about change in the field of psychotherapy. \n K. Dvorkin. Working with men in therapy. Group, 39(3):241–250, 2015.",
-  "@researchText3": {}
+  "@researchText3": {},
+
+  "deleteEntryTitle": "Eintrag löschen?",
+  "@deleteEntryTitle": {},
+  "deleteEntryText": "Bist du sicher, dass du diesen Eintrag löschen willst: \"{textTitle}\"",
+  "@deleteEntryText": {
+    "placeholders": {
+      "textTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteActionsCancel": "Abbrechen",
+  "@deleteActionsCancel": {},
+  "deleteActionsConfirm": "Bestätigen",
+  "@deleteActionsConfirm": {}
 }

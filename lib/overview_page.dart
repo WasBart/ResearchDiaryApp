@@ -39,6 +39,10 @@ class _OverviewPageState extends State<OverviewPage> {
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
+        if(loadedDayList.length == 0)
+        {
+          dayList.add(inactiveContainer(child: Text(AppLocalizations.of(context)!.noEntriesText)));
+        }
       });
     });
   }
@@ -113,6 +117,10 @@ class _OverviewPageState extends State<OverviewPage> {
     ).then((value) => createDaysList().then((value) {
           setState(() {
             dayList = loadedDayList;
+            if(loadedDayList.length == 0)
+            {
+              dayList.add(inactiveContainer(child: Text(AppLocalizations.of(context)!.noEntriesText)));
+            }
           });
         }));
   }

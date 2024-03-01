@@ -53,5 +53,6 @@ Container variableContainer({Widget? child}) {
       borderRadius: BorderRadius.circular(15.0),
       border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
     ),
+    child: child,
   );
 }

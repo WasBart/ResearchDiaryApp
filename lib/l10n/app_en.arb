@@ -43,6 +43,8 @@
 
   "overviewPageTitle": "Overview",
   "@overviewPageTitle": {},
+  "noEntriesText": "No entries have been added yet.",
+  "@noEntriesText": {},
 
   "emptyResearchArea": "Check back after you have added more days to your research diary.",
   "@emptyResearchArea": {},
@@ -51,5 +53,20 @@
   "researchText2" : "In his podcast Behind the Bastards, Robert Evans reveals that the notion of the alpha wolf is based on a misconception. The creator of the alpha wolf theory examined wolves in captivity at a zoo, which does not apply to ones living in the wild. The idea propagated especially by some male online influencers that men can be classified into alpha, beta or sigma individuals, has no apparent scientific background. There is neither a direct link between human social behavior and that of canines in captivity nor of wild specimens. \n Behind the Bastards. Part one: The birth of the manosphere. https: //www.iheart.com/podcast/105-behind-the-bastards-29236323/episode/part-one-the-birth-of-the-78006084/. Accessed: 2024-01-01. R. Schenkel. Expression studies on wolves: Captivity observations.",
   "@researchText2": {},
   "researchText3": "After extensive therapy practice and observations therapist and researcher Kate Dvorkin believes that therapy should be designed to play off of men's strengths and weaknesses. Rather than focusing on emotion-based conversational sessions, individual men's strengths in their lives should be the focus of therapy techniques. She recommends therapists focus closely on their male patients' problems and work towards concrete solutions. Cognitive behavioral therapy is one of the forms of therapy she prefers when treating men. Her findings show that not every type of therapy is perfectly suited for every type of patient, which means that finding a productive mode of therapy often includes trying different therapists and different therapy techniques. However, her and her peer’s focus on finding the best treatments for men can leave us optimistic about change in the field of psychotherapy. \n K. Dvorkin. Working with men in therapy. Group, 39(3):241–250, 2015.",
-  "@researchText3": {}
+  "@researchText3": {},
+
+  "deleteEntryTitle": "Delete Entry?",
+  "@deleteEntryTitle": {},
+  "deleteEntryText": "Are you sure you want to delete this entry: \"{textTitle}\"",
+  "@deleteEntryText": {
+    "placeholders": {
+      "textTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteActionsCancel": "Cancel",
+  "@deleteActionsCancel": {},
+  "deleteActionsConfirm": "Confirm",
+  "@deleteActionsConfirm": {}
 }

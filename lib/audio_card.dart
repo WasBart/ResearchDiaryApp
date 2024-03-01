@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //TODO: add delete button in the upper right corner
 
@@ -52,7 +53,8 @@ class _AudioCardState extends State<AudioCard> {
 
     Future.delayed(Duration.zero, () async {
       Duration? duration = await getDuration();
-      audioDuration = duration!.inMilliseconds;
+      setState(() { audioDuration = duration!.inMilliseconds;});
+
     });
 
     player.onPlayerStateChanged.listen((PlayerState newState) {
@@ -218,14 +220,14 @@ class _AudioCardState extends State<AudioCard> {
   void deleteVoiceNote() async {
     List<Widget> deleteActions = [
       TextButton(
-        child: Text("Cancel"),
+        child: Text(AppLocalizations.of(context)!.deleteActionsCancel),
         onPressed: () {
           Navigator.of(context).pop();
           return;
         },
       ),
       TextButton(
-        child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
+        child: Text(AppLocalizations.of(context)!.deleteActionsConfirm, style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () async {
           Navigator.of(context).pop();
           widget.onDeleted!();
@@ -238,8 +240,8 @@ class _AudioCardState extends State<AudioCard> {
 
     showCustomDialog(
         this.context,
-        "Delete Entry?",
-        "Are you sure you want to delete this entry: \"${widget.title}\"",
+        AppLocalizations.of(context)!.deleteEntryTitle,
+        AppLocalizations.of(context)!.deleteEntryText(widget.title),
         deleteActions);
   }
 

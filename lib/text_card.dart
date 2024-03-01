@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextCard extends StatefulWidget {
   String text;
@@ -65,14 +66,14 @@ class _TextCardState extends State<TextCard> {
   void deleteTextNote() async {
     List<Widget> deleteActions = [
       TextButton(
-        child: const Text("Cancel"),
+        child: Text(AppLocalizations.of(context)!.deleteActionsCancel),
         onPressed: () {
           Navigator.of(this.context).pop();
           return;
         },
       ),
       TextButton(
-        child: const Text("Confirm",
+        child: Text(AppLocalizations.of(context)!.deleteActionsConfirm,
             style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () async {
           Navigator.of(this.context).pop();
@@ -84,8 +85,8 @@ class _TextCardState extends State<TextCard> {
 
     showCustomDialog(
         context,
-        "Delete Entry?",
-        "Are you sure you want to delete this entry: \"${widget.text}\"",
+        AppLocalizations.of(context)!.deleteEntryTitle,
+        AppLocalizations.of(context)!.deleteEntryText(widget.text),
         deleteActions);
   }
 }
