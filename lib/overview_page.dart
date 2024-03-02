@@ -35,7 +35,7 @@ class _OverviewPageState extends State<OverviewPage> {
     super.initState();
 
     // TODO: Maybe add loading icon until data has finished fetching
-
+    dayList.add(Container(margin: const EdgeInsets.fromLTRB(150, 50, 150, 50),width: 0.5, height: 20, child: CircularProgressIndicator()));
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
