@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:async';
 
 // TODO: Make a scrollable view that loads clickable entries for days
 // days are determined by what entries per day exist for users
@@ -35,13 +36,17 @@ class _OverviewPageState extends State<OverviewPage> {
     super.initState();
 
     // TODO: Maybe add loading icon until data has finished fetching
-    dayList.add(Container(margin: const EdgeInsets.fromLTRB(150, 50, 150, 50),width: 0.5, height: 20, child: CircularProgressIndicator()));
+    dayList.add(Container(
+        margin: const EdgeInsets.fromLTRB(150, 50, 150, 50),
+        width: 0.5,
+        height: 20,
+        child: CircularProgressIndicator()));
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
-        if(loadedDayList.length == 0)
-        {
-          dayList.add(inactiveContainer(child: Text(AppLocalizations.of(context)!.noEntriesText)));
+        if (loadedDayList.length == 0) {
+          dayList.add(inactiveContainer(
+              child: Text(AppLocalizations.of(context)!.noEntriesText)));
         }
       });
     });
@@ -80,7 +85,23 @@ class _OverviewPageState extends State<OverviewPage> {
   }
 
   Future createDaysList() async {
-    List entriesList = await getTextNotesFromServer();
+    List<Widget> confirmActions = [
+      TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      )
+    ];
+    List entriesList = [];
+    try {
+      entriesList = await getTextNotesFromServer().timeout(Duration(seconds: 3));
+    }
+    on TimeoutException catch (e) {
+          showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle, AppLocalizations.of(context)!.timeoutText, confirmActions);
+        } on Error catch (e) {
+          print('Error: $e');
+        }
     List temp = await getVoiceNotesFromServer();
     entriesList.addAll(temp);
     datesList = [];
@@ -98,14 +119,13 @@ class _OverviewPageState extends State<OverviewPage> {
         entriesPerDayMap[entryDate]?.add(element);
       }
     }
-    var sortedByValueMap = Map.fromEntries(
-    entriesPerDayMap.entries.toList()..sort((e2, e1) => e1.value[0]['date'].compareTo(e2.value[0]['date'])));
+    var sortedByValueMap = Map.fromEntries(entriesPerDayMap.entries.toList()
+      ..sort((e2, e1) => e1.value[0]['date'].compareTo(e2.value[0]['date'])));
     entriesPerDayMap = sortedByValueMap;
     entriesPerDayMap.forEach((key, value) {
       loadedDayList.add(GestureDetector(
-        onTap: () => createDayPage(value),
-        child: mainContainer(child: Text(key))
-      ));
+          onTap: () => createDayPage(value),
+          child: mainContainer(child: Text(key))));
     });
   }
 
@@ -114,14 +134,18 @@ class _OverviewPageState extends State<OverviewPage> {
       MaterialPageRoute(builder: (BuildContext context) {
         return DayPage(assignedEntriesList: entriesPerDay);
       }),
-    ).then((value) => createDaysList().then((value) {
+    ).then(
+      (value) => createDaysList().then(
+        (value) {
           setState(() {
             dayList = loadedDayList;
-            if(loadedDayList.length == 0)
-            {
-              dayList.add(inactiveContainer(child: Text(AppLocalizations.of(context)!.noEntriesText)));
+            if (loadedDayList.length == 0) {
+              dayList.add(inactiveContainer(
+                  child: Text(AppLocalizations.of(context)!.noEntriesText)));
             }
           });
-        }));
+        },
+      ),
+    );
   }
 }

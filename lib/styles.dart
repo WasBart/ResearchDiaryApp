@@ -29,7 +29,7 @@ Container inactiveContainer({Widget? child}) {
   return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
       width: 200,
       height: 150,
       decoration: BoxDecoration(

@@ -68,5 +68,8 @@
   "deleteActionsCancel": "Cancel",
   "@deleteActionsCancel": {},
   "deleteActionsConfirm": "Confirm",
-  "@deleteActionsConfirm": {}
+  "@deleteActionsConfirm": {},
+
+  "timeoutTitle": "Timeout",
+  "timeoutText": "Your connection timed out while trying to reach the server."
 }
