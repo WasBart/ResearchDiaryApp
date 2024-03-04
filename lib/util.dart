@@ -11,6 +11,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:research_diary_app/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
 
 // TODO: Include audio recording capabilities
 // TODO: Include storage and loading capabilities
@@ -263,3 +264,37 @@ Future<void> getId() async {
             },
             child: const Icon(Icons.help_outline));
   }
+
+  Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/notificationCounter.txt');
+}
+
+Future<File> writeNotificationCounter(int counter) async {
+  final file = await _localFile;
+
+  // Write the file
+  return file.writeAsString('$counter');
+}
+
+Future<int> readNotificationCounter() async {
+  try {
+    print("read notification counter called");
+    final file = await _localFile;
+
+    // Read the file
+    final contents = await file.readAsString();
+
+    return int.parse(contents);
+  } catch (e) {
+    // If encountering an error, return -1
+    print("Error while reading counter: {$e}");
+    return -1;
+  } 
+}

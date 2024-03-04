@@ -95,7 +95,7 @@ class _OverviewPageState extends State<OverviewPage> {
     ];
     List entriesList = [];
     try {
-      entriesList = await getTextNotesFromServer().timeout(Duration(seconds: 3));
+      entriesList = await getTextNotesFromServer().timeout(Duration(seconds: 5));
     }
     on TimeoutException catch (e) {
           showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle, AppLocalizations.of(context)!.timeoutText, confirmActions);

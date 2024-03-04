@@ -49,6 +49,7 @@ class _RootPageState extends State<RootPage> {
     super.initState();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    WidgetsFlutterBinding.ensureInitialized();
   }
 
   @override

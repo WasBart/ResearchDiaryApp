@@ -15,6 +15,7 @@ import 'package:research_diary_app/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final NotificationService notificationService;
+  int _counter = 0;
   ElevatedButton researcherNotesButton = ElevatedButton(
       style: mainButtonStyle,
       onPressed: () {},
@@ -36,10 +38,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    notificationService = NotificationService();
-    notificationService.init().then((value) => notificationService
-        .showNotification(id: 1, title: "sample title", body: "it works"));
 
     getId().then((value) => getEnteredDays());
   }
@@ -60,7 +58,8 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: Text(AppLocalizations.of(context)!.addButtonText)),
+                child: mainContainer(
+                    child: Text(AppLocalizations.of(context)!.addButtonText)),
               ),
             ),
             Flexible(
@@ -72,10 +71,13 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: Text(AppLocalizations.of(context)!.overviewButtonText)),
+                child: mainContainer(
+                    child:
+                        Text(AppLocalizations.of(context)!.overviewButtonText)),
               ),
             ),
-            Flexible(child: GestureDetector(
+            Flexible(
+              child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext context) {
@@ -83,8 +85,11 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ).then((value) => getEnteredDays());
                 },
-                child: mainContainer(child: Text(AppLocalizations.of(context)!.researchButtonText)),
-              ),)
+                child: mainContainer(
+                    child:
+                        Text(AppLocalizations.of(context)!.researchButtonText)),
+              ),
+            )
           ]),
     );
   }
@@ -146,5 +151,52 @@ class _HomePageState extends State<HomePage> {
       numberOfDays = datesList.length;
       print("Number of days: $numberOfDays");
     });
+    await showResearchDialog(numberOfDays);
+  }
+
+    /// Load the initial counter value from persistent storage on start,
+  /// or fallback to 0 if it doesn't exist.
+  Future<void> _loadCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = prefs.getInt('counter') ?? 0;
+    });
+  }
+
+  /// After a click, increment the counter state and
+  /// asynchronously save it to persistent storage.
+  Future<void> _incrementCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('counter') ?? 0) + 1;
+      prefs.setInt('counter', _counter);
+    });
+  }
+
+  Future<void> showResearchDialog(int days) async {
+    List<Widget> confirmActions = [
+      TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      )
+    ];
+    await _loadCounter();
+    if(days >= 1 && _counter == 0)
+    {
+      showCustomDialog(context, AppLocalizations.of(context)!.researchNotificationTitle, AppLocalizations.of(context)!.researchNotificationBody, confirmActions);
+      await _incrementCounter();
+    }
+    else if(days >= 3 && _counter == 1)
+    {
+      showCustomDialog(context, AppLocalizations.of(context)!.researchNotificationTitle, AppLocalizations.of(context)!.researchNotificationBody, confirmActions);
+      await _incrementCounter();
+    }
+    else if(days >= 6 && _counter == 2)
+    {
+      showCustomDialog(context, AppLocalizations.of(context)!.researchNotificationTitle, AppLocalizations.of(context)!.researchNotificationBody, confirmActions);
+      await _incrementCounter();
+    }
   }
 }
