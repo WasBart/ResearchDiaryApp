@@ -13,7 +13,7 @@ Container mainContainer({Widget? child}) {
   return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       height: 150,
       width: 200,
       decoration: BoxDecoration(
@@ -45,7 +45,7 @@ Container variableContainer({Widget? child}) {
   return Container(
     alignment: Alignment.center,
     margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-    padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
     width: 200,
     decoration: BoxDecoration(
       color: appTertiaryColor,

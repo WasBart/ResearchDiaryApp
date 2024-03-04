@@ -86,17 +86,27 @@ class _RewardsPageState extends State<RewardsPage> {
       ];
     } else if (widget.numberOfDays < 3) {
       tempList = [
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote1Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote1Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText1)),
-        ),
+        )
       ];
     } else if (widget.numberOfDays < 6) {
       tempList = [
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote1Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote1Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText1)),
         ),
+        
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote2Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote2Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText2)),
@@ -104,14 +114,23 @@ class _RewardsPageState extends State<RewardsPage> {
       ];
     } else {
       tempList = [
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote1Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote1Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText1)),
         ),
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote2Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote2Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText2)),
         ),
+        AudioCard(
+          AppLocalizations.of(context)!.researchNote3Title, LocationType.assets,
+          path: AppLocalizations.of(context)!.researchNote3Path),
         IntrinsicHeight(
           child: variableContainer(
               child: Text(AppLocalizations.of(context)!.researchText3)),

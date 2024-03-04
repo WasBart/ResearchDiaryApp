@@ -37,7 +37,7 @@ class _AudioCardState extends State<AudioCard> {
 
   Widget slider() {
     return Container(
-        width: 300,
+        width: 150,
         height: 20,
         child: Slider.adaptive(
             value: (timeProgress / 1000).floorToDouble(),
@@ -91,15 +91,26 @@ class _AudioCardState extends State<AudioCard> {
 
   @override
   Widget build(BuildContext context) {
-    return mainContainer(
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      height: 150,
+      width: 200,
+      decoration: BoxDecoration(
+        color: appTertiaryColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+      ),
       child: Align(
         alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
+             widget.locationType != LocationType.assets ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -123,7 +134,20 @@ class _AudioCardState extends State<AudioCard> {
                     child: IconButton(
                         icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
               ],
-            ),
+            ) :  Padding(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Text(
+                    widget.title,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                ),
             IconButton(
               icon: Icon(state == PlayerState.playing
                   ? Icons.pause
@@ -152,7 +176,9 @@ class _AudioCardState extends State<AudioCard> {
                     ),
                   ),
                 ),
-                Expanded(child: slider()),
+                SizedBox(width: 2),
+                slider(),
+                SizedBox(width: 2),
                 Expanded(
                   child: Text(
                     getTimeString(audioDuration),
