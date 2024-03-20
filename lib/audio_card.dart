@@ -8,8 +8,6 @@ import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-//TODO: add delete button in the upper right corner
-
 enum LocationType { assets, local, serverBased }
 
 class AudioCard extends StatefulWidget {
@@ -73,8 +71,6 @@ class _AudioCardState extends State<AudioCard> {
   @override
   void dispose() async {
     super.dispose();
-    print(
-        "Dispose called on audio card, locationType: ${widget.locationType}, path: ${widget.path}");
     if (widget.locationType == LocationType.local) {
       await File(widget.path!).delete();
     }
@@ -115,7 +111,7 @@ class _AudioCardState extends State<AudioCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     widget.title,
                     textAlign: TextAlign.center,
@@ -128,11 +124,11 @@ class _AudioCardState extends State<AudioCard> {
                     ),
                   ),
                 ),
-                SizedBox(width: 60),
+                const SizedBox(width: 60),
                 Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                        icon: Icon(Icons.delete), onPressed: deleteVoiceNote))
+                        icon: const Icon(Icons.delete), onPressed: deleteVoiceNote))
               ],
             ) :  Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -176,9 +172,9 @@ class _AudioCardState extends State<AudioCard> {
                     ),
                   ),
                 ),
-                SizedBox(width: 2),
+                const SizedBox(width: 2),
                 slider(),
-                SizedBox(width: 2),
+                const SizedBox(width: 2),
                 Expanded(
                   child: Text(
                     getTimeString(audioDuration),
@@ -265,7 +261,7 @@ class _AudioCardState extends State<AudioCard> {
     ];
 
     showCustomDialog(
-        this.context,
+        context,
         AppLocalizations.of(context)!.deleteEntryTitle,
         AppLocalizations.of(context)!.deleteEntryText(widget.title),
         deleteActions);

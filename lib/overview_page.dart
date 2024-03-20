@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:research_diary_app/addentry_page_sound.dart';
 import 'package:research_diary_app/day_page.dart';
-import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/services.dart';
 import 'package:research_diary_app/styles.dart';
 import 'package:research_diary_app/util.dart';
-import 'package:research_diary_app/globals.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
-// TODO: Make a scrollable view that loads clickable entries for days
-// days are determined by what entries per day exist for users
-// if an entry exists, show the day here
-
-// TODO: Pass entriesPerDayMap to day pages accessed via elevated buttons.
-
 class OverviewPage extends StatefulWidget {
-  OverviewPage({Key? key}) : super(key: key);
+  const OverviewPage({Key? key}) : super(key: key);
 
   @override
   State<OverviewPage> createState() => _OverviewPageState();
@@ -35,16 +23,15 @@ class _OverviewPageState extends State<OverviewPage> {
   void initState() {
     super.initState();
 
-    // TODO: Maybe add loading icon until data has finished fetching
     dayList.add(Container(
         margin: const EdgeInsets.fromLTRB(150, 50, 150, 50),
         width: 0.5,
         height: 20,
-        child: CircularProgressIndicator()));
+        child: const CircularProgressIndicator()));
     createDaysList().then((value) {
       setState(() {
         dayList = loadedDayList;
-        if (loadedDayList.length == 0) {
+        if (loadedDayList.isEmpty) {
           dayList.add(inactiveContainer(
               child: Text(AppLocalizations.of(context)!.noEntriesText)));
         }
@@ -87,7 +74,7 @@ class _OverviewPageState extends State<OverviewPage> {
   Future createDaysList() async {
     List<Widget> confirmActions = [
       TextButton(
-        child: Text("OK"),
+        child: const Text("OK"),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -95,7 +82,7 @@ class _OverviewPageState extends State<OverviewPage> {
     ];
     List entriesList = [];
     try {
-      entriesList = await getTextNotesFromServer().timeout(Duration(seconds: 5));
+      entriesList = await getTextNotesFromServer().timeout(const Duration(seconds: 5));
     }
     on TimeoutException catch (e) {
           showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle, AppLocalizations.of(context)!.timeoutText, confirmActions);
@@ -139,7 +126,7 @@ class _OverviewPageState extends State<OverviewPage> {
         (value) {
           setState(() {
             dayList = loadedDayList;
-            if (loadedDayList.length == 0) {
+            if (loadedDayList.isEmpty) {
               dayList.add(inactiveContainer(
                   child: Text(AppLocalizations.of(context)!.noEntriesText)));
             }

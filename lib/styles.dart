@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 Color appBgColor = const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8);
 Color appPrimaryColor = const Color(0xFFE6590E).withOpacity(0.8);

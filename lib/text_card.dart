@@ -38,7 +38,7 @@ class _TextCardState extends State<TextCard> {
           children: [
           Text(
             widget.title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -51,7 +51,7 @@ class _TextCardState extends State<TextCard> {
                     maxLines: null,
                     enabled: false,
                     controller: TextEditingController(text: widget.text),
-                    decoration: InputDecoration(border: InputBorder.none)),
+                    decoration: const InputDecoration(border: InputBorder.none)),
               ),
               Flexible(
                   child: IconButton(
@@ -68,15 +68,15 @@ class _TextCardState extends State<TextCard> {
       TextButton(
         child: Text(AppLocalizations.of(context)!.deleteActionsCancel),
         onPressed: () {
-          Navigator.of(this.context).pop();
+          Navigator.of(context).pop();
           return;
         },
       ),
       TextButton(
         child: Text(AppLocalizations.of(context)!.deleteActionsConfirm,
-            style: TextStyle(fontWeight: FontWeight.bold)),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () async {
-          Navigator.of(this.context).pop();
+          Navigator.of(context).pop();
           widget.onDeleted!();
           await deleteTextNoteFromServer(widget.dbId);
         },

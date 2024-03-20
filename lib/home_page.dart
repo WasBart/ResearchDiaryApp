@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:research_diary_app/addentry_page_sound.dart';
-import 'package:research_diary_app/day_page.dart';
 import 'package:research_diary_app/overview_page.dart';
 import 'package:research_diary_app/addentry_page.dart';
-import 'package:research_diary_app/addentry_page_wave.dart';
-import 'package:research_diary_app/play_audio_page.dart';
-import 'package:research_diary_app/rewards_page.dart';
+import 'package:research_diary_app/notes_page.dart';
 import 'package:research_diary_app/services.dart';
-import 'package:research_diary_app/sound_example.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:research_diary_app/styles.dart';
-import 'package:research_diary_app/globals.dart';
-import 'package:research_diary_app/notification_service.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,15 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final NotificationService notificationService;
   int _counter = 0;
-  ElevatedButton researcherNotesButton = ElevatedButton(
-      style: mainButtonStyle,
-      onPressed: () {},
-      child: Text("Researcher Notes"));
   int numberOfDays = 0;
-  Widget researcherNotesContainer =
-      mainContainer(child: Text("Researcher Notes"));
 
   @override
   void initState() {
@@ -54,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext context) {
-                      return const AddEntryPageWave();
+                      return const AddEntryPage();
                     }),
                   ).then((value) => getEnteredDays());
                 },
@@ -67,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext context) {
-                      return OverviewPage();
+                      return const OverviewPage();
                     }),
                   ).then((value) => getEnteredDays());
                 },
@@ -81,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext context) {
-                      return RewardsPage(numberOfDays: numberOfDays);
+                      return NotesPage(numberOfDays: numberOfDays);
                     }),
                   ).then((value) => getEnteredDays());
                 },
@@ -94,14 +78,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /*void researcherNotesButtonOnPressed() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) {
-        return RewardsPage();
-      }),
-    );
-  }*/
-
   bool setResearcherNotesButtonActive() {
     if (numberOfDays >= 3) {
       return true;
@@ -109,30 +85,6 @@ class _HomePageState extends State<HomePage> {
       return false;
     }
   }
-
-  /*void updateNumberOfDays() {
-    bool buttonActive = setResearcherNotesButtonActive();
-    getEnteredDays().then((value) {
-      setState(() {
-        researcherNotesButton = ElevatedButton(
-            onPressed: setResearcherNotesButtonActive()
-                ? researcherNotesButtonOnPressed
-                : null,
-            child: Text(numberOfDays.toString()));
-        researcherNotesContainer = GestureDetector(
-            onTap: () {
-              buttonActive ? researcherNotesButtonOnPressed() : showCustomDialog(
-                  context,
-                  "Research Area",
-                  "Check back after you have added more days to your research diary to find research and additional info pertaining to men's studies here.",
-                  List.empty());
-            },
-            child: buttonActive
-                ? mainContainer(child: const Text("Research Area"))
-                : inactiveContainer(child: const Text("Research Area")));
-      });
-    });
-  }*/
 
   Future getEnteredDays() async {
     List textEntriesList = await getTextNotesFromServer();
@@ -144,18 +96,14 @@ class _HomePageState extends State<HomePage> {
       entryDate = entryDate.substring(0, entryDate.indexOf("T"));
       if (!datesList.contains(entryDate)) {
         datesList.add(entryDate);
-        print("Entry date just added: $entryDate");
       }
     }
     setState(() {
       numberOfDays = datesList.length;
-      print("Number of days: $numberOfDays");
     });
     await showResearchDialog(numberOfDays);
   }
 
-    /// Load the initial counter value from persistent storage on start,
-  /// or fallback to 0 if it doesn't exist.
   Future<void> _loadCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -163,8 +111,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /// After a click, increment the counter state and
-  /// asynchronously save it to persistent storage.
   Future<void> _incrementCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -176,7 +122,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> showResearchDialog(int days) async {
     List<Widget> confirmActions = [
       TextButton(
-        child: Text("OK"),
+        child: const Text("OK"),
         onPressed: () {
           Navigator.of(context).pop();
         },

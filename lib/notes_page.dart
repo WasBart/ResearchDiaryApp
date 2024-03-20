@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:research_diary_app/audio_card.dart';
 import 'package:research_diary_app/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:research_diary_app/text_card.dart';
 import 'package:research_diary_app/util.dart';
 
-class RewardsPage extends StatefulWidget {
-  RewardsPage({Key? key, required this.numberOfDays}) : super(key: key);
+class NotesPage extends StatefulWidget {
+const NotesPage({Key? key, required this.numberOfDays}) : super(key: key);
 
-  final numberOfDays;
+  final int numberOfDays;
 
   @override
-  State<RewardsPage> createState() => _RewardsPageState();
+  State<NotesPage> createState() => _NotesPageState();
 }
 
-class _RewardsPageState extends State<RewardsPage> {
+class _NotesPageState extends State<NotesPage> {
   List<Widget> researcherNotesList = [];
   List<Widget> allResearcherNotesList = [];
 
@@ -36,14 +35,6 @@ class _RewardsPageState extends State<RewardsPage> {
         researcherNotesList.addAll(allResearcherNotesList);
       });
     });
-
-    researcherNotesList
-        .add(inactiveContainer(child: Text(widget.numberOfDays.toString())));
-    for (var i = 0; i < widget.numberOfDays; i++) {
-      researcherNotesList.add(AudioCard(
-          "Researcher Note ${i + 1}", LocationType.assets,
-          path: "marvinsroom.mp3"));
-    }
   }
 
   @override
@@ -66,8 +57,6 @@ class _RewardsPageState extends State<RewardsPage> {
               itemBuilder: (BuildContext context, int index) {
                 return getVoiceNotesList()[index];
               },
-              //separatorBuilder: (BuildContext context, int index) =>
-              //    const Divider(),
             ))
           ]),
       floatingActionButton: helpButton(context: context),

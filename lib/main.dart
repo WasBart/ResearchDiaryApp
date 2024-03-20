@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:research_diary_app/home_page.dart';
-import 'package:research_diary_app/notification_service.dart';
 import 'package:research_diary_app/styles.dart';
-import 'package:research_diary_app/globals.dart';
 import 'package:research_diary_app/util.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-// TODO: Add 'Rewards'-page that shows all unlocked audio files
-
-late final NotificationService notificationService;
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -25,8 +18,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: createMaterialColor(appPrimaryColor),
-          textTheme: TextTheme()
-              .copyWith(bodyMedium: TextStyle(fontWeight: FontWeight.bold))),
+          textTheme: const TextTheme()
+              .copyWith(bodyMedium: const TextStyle(fontWeight: FontWeight.bold))),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const RootPage(),
@@ -55,8 +48,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
-      //decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF6B4F40).withOpacity(0.8), Color(0xFFEA8954).withOpacity(0.8)])),
+      color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
