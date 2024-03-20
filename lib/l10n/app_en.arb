@@ -40,6 +40,8 @@
   "@entrySavedTitleText": {},
   "entrySavedText": "Your entry has been saved.",
   "@entrySavedText": {},
+  "studyPrompt": "What social media platform did you visit and with what content and how did you interact on there? What were your expectations on how it would change your emotional state before you visited the platform? What emotions are you experiencing after having visited the platform?",
+  "@studyPrompt": {},
 
   "overviewPageTitle": "Overview",
   "@overviewPageTitle": {},

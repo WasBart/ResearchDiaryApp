@@ -39,6 +39,8 @@
   "@entrySavedTitleText": {},
   "entrySavedText": "Dein Eintrag wurde gespeichert.",
   "@entrySavedText": {},
+  "studyPrompt": "Welche Social Media Plattform hast du besucht und mit was für Content und in welcher Art hast du interagiert? Was waren deine Erwartungen, wie der Besuch dieser Plattform deinen Gemütszustand verändern würde? Was für Emotionen erlebst du derzeit, nachdem du diese Social Media Plattform besucht hast?",
+  "@studyPrompt": {},
 
   "overviewPageTitle": "Übersicht",
   "@overviewPageTitle": {},

@@ -175,90 +175,94 @@ class _AddEntryPageState extends State<AddEntryPage> {
           backgroundColor: Colors.transparent,
           title: Text(AppLocalizations.of(context)!.addEntryPageTitle),
         ),
-        body: Container(
-          alignment: Alignment.center,
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-          width: 400,
-          height: 500,
-          decoration: BoxDecoration(
-            color: appBgColor,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15.0),
-            border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
-          ),
-          child: Column(
-            children: [
-              titleTextField,
-              TextField(
-                  controller:
-                      dateController,
-                  decoration: InputDecoration(
-                      icon: const Icon(Icons.calendar_today),
-                      labelText: AppLocalizations.of(context)!.datePickerText,
-                      labelStyle: const TextStyle(
-                          fontWeight: FontWeight.bold)
-                      ),
-                  readOnly: true,
-                  onTap: () async {
-                    pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(
-                            2000),
-                        lastDate: DateTime(2101));
-                    if (pickedDate != null) {
-                      debugPrint(pickedDate
-                          .toString());
-
-                      setState(() {
-                        dateController.text = formatDate(
-                            pickedDate!);
-                      });
-                    } else {
-                      debugPrint("Date is not selected");
-                    }
-                  }),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        body: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+              width: 400,
+              height: 500,
+              decoration: BoxDecoration(
+                color: appBgColor,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(15.0),
+                border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
+              ),
+              child: Column(
                 children: [
-                  Text(AppLocalizations.of(context)!.typeHeaderText),
-                  const SizedBox(width: 10),
-                  DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    underline: Container(
-                      height: 2,
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        textOrAudio = value;
-                        createInputFields(value);
-                        dropdownValue = value!;
-                      });
-                    },
-                    items: dropdownList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                      );
-                    }).toList(),
+                  titleTextField,
+                  TextField(
+                      controller:
+                          dateController,
+                      decoration: InputDecoration(
+                          icon: const Icon(Icons.calendar_today),
+                          labelText: AppLocalizations.of(context)!.datePickerText,
+                          labelStyle: const TextStyle(
+                              fontWeight: FontWeight.bold)
+                          ),
+                      readOnly: true,
+                      onTap: () async {
+                        pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(
+                                2000),
+                            lastDate: DateTime(2101));
+                        if (pickedDate != null) {
+                          debugPrint(pickedDate
+                              .toString());
+
+                          setState(() {
+                            dateController.text = formatDate(
+                                pickedDate!);
+                          });
+                        } else {
+                          debugPrint("Date is not selected");
+                        }
+                      }),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(AppLocalizations.of(context)!.typeHeaderText),
+                      const SizedBox(width: 10),
+                      DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        underline: Container(
+                          height: 2,
+                        ),
+                        onChanged: (String? value) {
+                          setState(() {
+                            textOrAudio = value;
+                            createInputFields(value);
+                            dropdownValue = value!;
+                          });
+                        },
+                        items: dropdownList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value,
+                                style: const TextStyle(fontWeight: FontWeight.bold)),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 10),
+                  for (Widget widget in inputWidgets) widget,
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                      onPressed: confirmEntry,
+                      child: Text(AppLocalizations.of(context)!.confirmButtonText,
+                          style: const TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
-              const SizedBox(height: 10),
-              for (Widget widget in inputWidgets) widget,
-              const SizedBox(height: 10),
-              ElevatedButton(
-                  onPressed: confirmEntry,
-                  child: Text(AppLocalizations.of(context)!.confirmButtonText,
-                      style: const TextStyle(fontWeight: FontWeight.bold))),
-            ],
-          ),
+            ),
+          Center(child: Text(AppLocalizations.of(context)!.studyPrompt, textAlign: TextAlign.center))],
         ),
         floatingActionButton: helpButton(context: context),
       ),
