@@ -10,7 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum LocationType { assets, local, serverBased }
 
-class AudioCard extends StatefulWidget {
+class TempAudioCard extends StatefulWidget {
   String title;
   LocationType locationType;
   var path;
@@ -19,13 +19,13 @@ class AudioCard extends StatefulWidget {
   final VoidCallback? onDeleted;
 
   @override
-  _AudioCardState createState() => _AudioCardState();
+  _TempAudioCardState createState() => _TempAudioCardState();
 
-  AudioCard(this.title, this.locationType,
+  TempAudioCard(this.title, this.locationType,
       {this.path, this.dbId, this.onDeleted});
 }
 
-class _AudioCardState extends State<AudioCard> {
+class _TempAudioCardState extends State<TempAudioCard> {
   AudioPlayer player = AudioPlayer();
   PlayerState state = PlayerState.paused;
   bool loaded = false;
@@ -89,10 +89,10 @@ class _AudioCardState extends State<AudioCard> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       height: 150,
-      width: 350,
+      width: 400,
       decoration: BoxDecoration(
         color: appTertiaryColor,
         shape: BoxShape.rectangle,

@@ -8,7 +8,7 @@ import 'package:audioplayers/audioplayers.dart' as ap;
 import 'dart:async';
 
 import 'package:research_diary_app/services.dart';
-import 'package:research_diary_app/audio_card.dart';
+import 'package:research_diary_app/temp_audio_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const List<String> dropdownList = <String>['Text', 'Audio'];
@@ -295,7 +295,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
     setState(() {
       inputWidgets.removeLast();
       inputWidgets.add(
-        AudioCard(
+        TempAudioCard(
           "Voice Note",
           LocationType.local,
           path: path,
