@@ -5,7 +5,7 @@
   "@overviewButtonText": {},
   "researchButtonText": "Research Area",
   "@researchButtonText": {},
-  "helpText": "Created by Wassily Bartuska for a master's thesis researching young men, social media and mental health at TU Wien. If you need support or run into any bugs or errors feel free to contact me at: \n wassily.bartuska@student.tuwien.ac.at. \n Device ID: {deviceId}",
+  "helpText": "Entwickelt von Wassily Bartuska für eine Diplomarbeit an der TU Wien, die Junge Männer, Social Media und mentale Gesundheit untersucht. Falls du Hilfe brauchst oder auf Bugs oder Fehler in der App stößt, kontaktiere mich jederzeit unter: \n wassily.bartuska@student.tuwien.ac.at. \n \n Device ID: {deviceId}",
   "@helpText": {
     "placeholders": {
     "deviceId": {
