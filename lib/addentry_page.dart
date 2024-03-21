@@ -169,6 +169,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
     return Container(
       color: appBgColor,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0,
