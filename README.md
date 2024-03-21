@@ -1,16 +1,7 @@
-# learningdart
+# Custom Research Diary App
 
-A new Flutter project.
+A custom research diary app built using flutter.
 
-## Getting Started
+The lib folder includes the main components of the app in .dart files.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To be used in conjunction with the research diary backend repository.
