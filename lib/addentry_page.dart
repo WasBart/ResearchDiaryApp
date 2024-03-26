@@ -58,9 +58,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         thoughtsTextField = TextField(
-            keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.done,
             minLines: 1,
-            maxLines: 3,
+            maxLines: 2,
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 hintText: AppLocalizations.of(context)!.textFieldText,
@@ -178,6 +178,13 @@ class _AddEntryPageState extends State<AddEntryPage> {
         ),
         body: Column(
           children: [
+                 Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                   child: Center(
+                                 child: Text(AppLocalizations.of(context)!.studyPrompt,
+                      textAlign: TextAlign.center,  style: TextStyle(
+                       fontSize: 12))),
+                 ),
             Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.all(20),
@@ -194,29 +201,25 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 children: [
                   titleTextField,
                   TextField(
-                      controller:
-                          dateController,
+                      controller: dateController,
                       decoration: InputDecoration(
                           icon: const Icon(Icons.calendar_today),
-                          labelText: AppLocalizations.of(context)!.datePickerText,
-                          labelStyle: const TextStyle(
-                              fontWeight: FontWeight.bold)
-                          ),
+                          labelText:
+                              AppLocalizations.of(context)!.datePickerText,
+                          labelStyle:
+                              const TextStyle(fontWeight: FontWeight.bold)),
                       readOnly: true,
                       onTap: () async {
                         pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(
-                                2000),
+                            firstDate: DateTime(2000),
                             lastDate: DateTime(2101));
                         if (pickedDate != null) {
-                          debugPrint(pickedDate
-                              .toString());
+                          debugPrint(pickedDate.toString());
 
                           setState(() {
-                            dateController.text = formatDate(
-                                pickedDate!);
+                            dateController.text = formatDate(pickedDate!);
                           });
                         } else {
                           debugPrint("Date is not selected");
@@ -247,7 +250,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value,
-                                style: const TextStyle(fontWeight: FontWeight.bold)),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                           );
                         }).toList(),
                       ),
@@ -258,12 +262,13 @@ class _AddEntryPageState extends State<AddEntryPage> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                       onPressed: confirmEntry,
-                      child: Text(AppLocalizations.of(context)!.confirmButtonText,
+                      child: Text(
+                          AppLocalizations.of(context)!.confirmButtonText,
                           style: const TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
             ),
-          Center(child: Text(AppLocalizations.of(context)!.studyPrompt, textAlign: TextAlign.center))],
+          ],
         ),
         floatingActionButton: helpButton(context: context),
       ),
@@ -362,7 +367,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
                 confirmActions);
           }
         } on TimeoutException catch (e) {
-          showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle, AppLocalizations.of(context)!.timeoutText, confirmActions);
+          showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle,
+              AppLocalizations.of(context)!.timeoutText, confirmActions);
         } on Error catch (e) {
           print('Error: $e');
         }
@@ -381,14 +387,16 @@ class _AddEntryPageState extends State<AddEntryPage> {
       } else {
         try {
           await postVoiceNoteToServer(
-              path!, titleController.text, pickedDate.toString()).timeout(const Duration(seconds: 3));
+                  path!, titleController.text, pickedDate.toString())
+              .timeout(const Duration(seconds: 3));
           showCustomDialog(
               context,
               AppLocalizations.of(context)!.entrySavedTitleText,
               AppLocalizations.of(context)!.entrySavedText,
               confirmActions);
         } on TimeoutException catch (e) {
-          showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle, AppLocalizations.of(context)!.timeoutText, confirmActions);
+          showCustomDialog(context, AppLocalizations.of(context)!.timeoutTitle,
+              AppLocalizations.of(context)!.timeoutText, confirmActions);
         } on Error catch (e) {
           print('Error: $e');
         }
